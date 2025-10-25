@@ -35,21 +35,26 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 
 			<body
 				className={clsx(
-					"text-foreground bg-llm-masala font-sans antialiased",
+					"dark:text-llm-lace text-llm-masala dark:bg-llm-masala bg-llm-lace font-sans antialiased",
 					fontSans.variable,
 				)}
 			>
 				<Providers themeProps={{ attribute: "class", enableSystem: true }}>
+<<<<<<< HEAD
 					<div className="relative flex flex-col h-screen">
 						<LlmNavbar/>
 						<main className="h-full">
+=======
+					<div className="flex flex-col h-screen w-full">
+						<LlmNavbar/>
+						<main className="flex-1 overflow-auto">
+>>>>>>> c80ba40 (Update body colors)
 							{children}
 						</main>
 					</div>
 				</Providers>
+				<Analytics/>
 			</body>
-
-			<Analytics/>
 		</html>
 	);
 }
