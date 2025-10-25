@@ -39,10 +39,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 					fontSans.variable,
 				)}
 			>
-				<LlmNavbar/>
 				<Providers themeProps={{ attribute: "class", enableSystem: true }}>
 					<div className="relative flex flex-col h-screen">
-						<main>
+						<LlmNavbar/>
+						<main className="h-full">
 							{children}
 						</main>
 					</div>

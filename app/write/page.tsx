@@ -15,10 +15,10 @@ export default function Write(): JSX.Element {
 	);
 	
 	return (
-		<div className="flex justify-center h-screen w-full overflow-hidden">
-			<div className="flex gap-x-4 h-screen w-[90%] p-4">
+		<div className="flex justify-center h-full w-full overflow-hidden">
+			<div className="flex gap-x-4 w-[90%] p-4">
 				<textarea
-					className="flex-1 h-full p-4 bg-default-50 text-foreground resize-none rounded-xl outline-none"
+					className="flex-1 h-full p-4 bg-default-50 text-foreground resize-none rounded-xl"
 					placeholder="Enter or paste your text..."
 					style={{ fontSize: "1rem" }}
 				/>
