@@ -13,6 +13,13 @@ const config = {
 				sans: ["var(--font-sans)"],
 				mono: ["var(--font-mono)"],
 			},
+			colors: {
+				"llm-chinois": 		"#798C8C",
+				"llm-sea-glass": 	"#AEBFBE",
+				"llm-blue-flower": 	"#D0D9D4",
+				"llm-lace": 		"#F2EFDF",
+				"llm-masala": 		"#59554C"
+			}
 		},
 	},
 	darkMode: "class",
