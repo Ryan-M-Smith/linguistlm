@@ -6,6 +6,7 @@ import { ReactNode } from "react";
 import { fontSans } from "@/config/fonts";
 import { Providers } from "@/components/providers";
 import { siteConfig } from "@/config/site";
+import LlmNavbar from "@/components/navbar"
 
 import "@/styles/globals.css";
 
@@ -38,6 +39,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 					fontSans.variable,
 				)}
 			>
+				<LlmNavbar/>
 				<Providers themeProps={{ attribute: "class", enableSystem: true }}>
 					<div className="relative flex flex-col h-screen">
 						<main>

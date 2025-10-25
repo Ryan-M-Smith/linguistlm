@@ -14,11 +14,11 @@ const config = {
 				mono: ["var(--font-mono)"],
 			},
 			colors: {
-				"llm-chinois": 		"#798C8C",
-				"llm-sea-glass": 	"#AEBFBE",
-				"llm-blue-flower": 	"#D0D9D4",
-				"llm-lace": 		"#F2EFDF",
-				"llm-masala": 		"#59554C"
+				"llm-chinois": 		"#255757",
+				"llm-sea-glass": 	"#77C5C5",
+				"llm-blue-flower": 	"#97E5E5",
+				"llm-lace": 		"#F8F8F0",
+				"llm-masala": 		"#303030"
 			}
 		},
 	},
