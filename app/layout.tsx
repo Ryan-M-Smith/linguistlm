@@ -1,3 +1,4 @@
+import { Analytics } from "@vercel/analytics/next"
 import clsx from "clsx";
 import { Metadata, Viewport } from "next";
 import { ReactNode } from "react";
@@ -45,6 +46,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 					</div>
 				</Providers>
 			</body>
+
+			<Analytics/>
 		</html>
 	);
 }
