@@ -4,8 +4,8 @@ import { Button } from "@heroui/button";
 import { FaArrowUp } from "react-icons/fa6";
 import { HiOutlineUpload } from "react-icons/hi";
 import { JSX, useRef, useState } from "react";
-import { Textarea } from "@heroui/input";
 
+import ChatBox from "@/components/chatbox";
 import { Drop } from "@/components/drop";
 
 export default function Read(): JSX.Element {
@@ -117,26 +117,7 @@ export default function Read(): JSX.Element {
                         />
                     </div>
                 </Drop>
-                <div
-                    className={`
-                        border-4 dark:bg-default-100 dark:border-llm-chinois bg-llm-blue-flower/10
-                        border-llm-masala w-[30%] rounded-xl flex flex-col justify-end
-                        hover:bg-llm-blue-flower/10 hover:dark:bg-default-100
-                        hover:border-llm-masala transition-none
-                    `}
-                >
-                    <Textarea
-                        className="p-4 overflow-y-auto resize-none"
-                        classNames={{
-                            inputWrapper: `border-4 dark:bg-llm-sea-glass/60 dark:border-llm-chinois
-                                           dark:bg-llm-chinois/20 bg-llm-lace hover:bg-llm-lace
-                                           hover:dark:bg-llm-chinois/20 transition-none`
-                        }}
-                        radius="lg"
-                        endContent={<SendButton />}
-                        maxRows={4}
-                    />
-                </div>
+                <ChatBox endpoint="/api/explainations"/>
             </div>
         </div>
     );

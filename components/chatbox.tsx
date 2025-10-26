@@ -1,57 +1,118 @@
-import { Button } from "@heroui/button";
-import { FaArrowUp } from "react-icons/fa6";
-import { JSX, useState } from "react";
-import { Textarea } from "@heroui/input";
+"use client";
+
+import { JSX, useId, useState } from "react";
+import Markdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import InputBox from "./input-box";
+import Message from "@/components/message";
+
+type Role = "user" | "model";
+type ChatMessage = { id: string; role: Role; text: string; isLoading?: boolean };
 
 interface ChatBoxProps {
 	className?: string;
+	endpoint?: string;
 }
 
-export default function ChatBox({ className }: ChatBoxProps): JSX.Element {
-	const [chatValue, setChatValue] = useState("");
-	
-	const SendButton = () => (
-		<Button
-			className={`
-				absolute right-3 bottom-3 bg-llm-masala text-white
-				rounded-full shadow-sm hover:bg-llm-sea-glass
-				focus:outline-none focus:ring-2 focus:ring-llm-sea-glass z-10
-				border-2 dark:border-llm-sea-glass border-llm-masala
-			`}
-			radius="full"
-			variant="bordered"
-			startContent={<FaArrowUp size={16} />}
-			isIconOnly
-		/>
-	);
+export default function ChatBox({ className, endpoint = "/api/explainations" }: ChatBoxProps): JSX.Element {
+	const [messages, setMessages] = useState<ChatMessage[]>([]);
+	// useId yields a value that's consistent between server and client, avoiding hydration mismatches
+	const listId = useId();
+
+	const send = async (prompt: string) => {
+		const q = prompt?.trim();
+		if (!q) return;
+
+		const idUser = crypto.randomUUID?.() || `${Date.now()}-u`;
+		const idModel = crypto.randomUUID?.() || `${Date.now()}-m`;
+
+		setMessages((prev) => [
+			...prev,
+			{ id: idUser, role: "user", text: q },
+			{ id: idModel, role: "model", text: "", isLoading: true },
+		]);
+
+		try {
+			const res = await fetch(endpoint, {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ query: q }),
+			});
+			const reader = res.body?.getReader();
+			if (!reader) {
+				const text = await res.text();
+				setMessages((prev) => prev.map(m => m.id === idModel ? { ...m, text, isLoading: false } : m));
+			} else {
+				const decoder = new TextDecoder("utf-8");
+				let first = true;
+				while (true) {
+					const { done, value } = await reader.read();
+					if (done) break;
+					const chunk = decoder.decode(value, { stream: true });
+					setMessages((prev) => prev.map(m => {
+						if (m.id !== idModel) return m;
+						const nextText = (m.text || "") + chunk;
+						return { ...m, text: nextText, isLoading: first ? false : m.isLoading };
+					}));
+					first = false;
+					queueMicrotask(() => {
+						const el = document.getElementById(`chat-list-${listId}`);
+						if (el) el.scrollTop = el.scrollHeight;
+					});
+				}
+				setMessages((prev) => prev.map(m => m.id === idModel ? { ...m, isLoading: false } : m));
+			}
+		}
+		catch (err: any) {
+			const msg = err?.message || String(err);
+			setMessages((prev) => prev.map(m => m.id === idModel ? { ...m, text: `Error: ${msg}`, isLoading: false } : m));
+		}
+
+		// Scroll to bottom after adding response
+		queueMicrotask(() => {
+			const el = document.getElementById(`chat-list-${listId}`);
+			if (el) el.scrollTop = el.scrollHeight;
+		});
+	};
 
 	return (
 		<div
 			className={`
-				border-1 dark:bg-default-50 dark:border-llm-sea-glass bg-llm-blue-flower/10
-				border-llm-masala w-[30%] rounded-xl flex flex-col justify-end
-				hover:bg-llm-blue-flower/10 hover:dark:bg-default-50
-				hover:border-llm-masala transition-none
+				${className} border-1 dark:bg-default-50 dark:border-llm-sea-glass 
+				bg-llm-blue-flower/10 border-llm-masala w-[30%] rounded-xl flex
+				flex-col h-full min-h-0 max-h-full hover:bg-llm-blue-flower/10 hover:dark:bg-default-50
+				hover:border-llm-masala transition-none overflow-none
 			`}
 		>	
-			<div>
-
+			<div id={`chat-list-${listId}`} className="flex-1 min-h-0 overflow-y-auto px-2 sm:px-4 pt-2">
+				{messages.map((m, i) => (
+					<Message key={m.id} role={m.role} isLoading={m.isLoading} isFirst={i === 0}>
+						{m.role === "model" ? (
+							<div
+								className="
+									text-medium leading-5 prose dark:text-llm-lace text-llm-masala
+									prose-headings:mt-2 prose-headings:mb-1 prose-headings:leading-tight
+									prose-h1:text-md prose-h2:text-sm prose-h3:text-sm
+									prose-p:my-0.5 prose-p:leading-snug
+									prose-li:my-0.5 prose-ul:my-1 prose-ol:my-1 prose-ul:pl-5 prose-ol:pl-5
+									prose-strong:font-semibold
+									prose-code:text-[0.9em]
+									prose-pre:my-2 prose-blockquote:my-2
+									dark:prose-a:text-blue-400 prose-a:text-primary
+								"
+							>
+								<Markdown remarkPlugins={[remarkGfm]}>{m.text}</Markdown>
+							</div>
+						) : (
+							m.text
+						)}
+					</Message>
+				))}
 			</div>
 
-			<Textarea
-				className="p-4 overflow-y-auto resize-none"
-				classNames={{
-					inputWrapper: `border-1 dark:bg-default-50 dark:border-llm-sea-glass
-								   dark:bg-llm-masala bg-llm-lace hover:bg-llm-lace
-								   hover:dark:bg-llm-masala transition-none`
-				}}
-				value={chatValue}
-				onChange={ (e) => setChatValue(e.target.value) }
-				placeholder="Explanations will appear here..."
-				radius="lg"
-				maxRows={4}
-				endContent={<SendButton/>}
-			/>
+			<div className="p-2">
+				<InputBox onSubmit={send} />
+			</div>
 		</div>
 	)
 }

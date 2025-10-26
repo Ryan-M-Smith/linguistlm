@@ -63,9 +63,9 @@ export default function Write(): JSX.Element {
 	return (
 		<>
 		{/* Tooltip manager */}
-		<TooltipPortal onAccept={handleAccept} onDismiss={handleDismiss} onExplain={handleExplain} />
+		<TooltipPortal onAccept={handleAccept} onDismiss={handleDismiss} onExplain={handleExplain}/>
 		<div className="flex justify-center w-full h-full overflow-hidden">
-			<div className="flex gap-x-4 w-[90%] p-4">
+			<div className="flex gap-x-4 w-[90%] p-4 h-full min-h-0">
 				<div className="flex-1 min-w-0 h-full relative">
 					<Highlighter
 						value={textValue}
@@ -80,7 +80,9 @@ export default function Write(): JSX.Element {
 						`}
 						style={{
 							fontSize: "1rem",
-							color: "#f3f3e7",
+							color: typeof window !== "undefined" && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+								? "#f3f3e7"
+								: "#302c2a",
 							fontFamily: "inherit",
 							lineHeight: 1.5,
 							letterSpacing: "normal",
@@ -91,7 +93,7 @@ export default function Write(): JSX.Element {
 						}}
 					/>
 				</div>
-				<ChatBox/>
+				<ChatBox endpoint="/api/explainations"/>
 			</div>
 		</div>
 		</>

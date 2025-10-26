@@ -42,7 +42,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 				<Providers themeProps={{ attribute: "class", enableSystem: true }}>
 					<div className="relative flex flex-col h-screen">
 						<LlmNavbar/>
-						<main className="h-full">
+						<main className="flex-1 min-h-0">
 							{children}
 						</main>
 					</div>
