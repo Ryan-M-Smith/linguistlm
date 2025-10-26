@@ -41,13 +41,13 @@ export default function Home(): JSX.Element {
                             </div>
 
                             <div className="space-y-4">
-                                <div className="bg-default-100 p-4 rounded-2xl slide-in">
+                                <div className="bg-default-100 p-4 rounded-2xl slide-in rounded-tl-0 rounded-tl-none">
                                     <p className="text-foreground">Bonjour! Let's practice introducing yourself. Try saying "My name is..." in French.</p>
                                 </div>
-                                <div className="bg-llm-chinois text-primary-foreground p-4 rounded-2xl ml-8 slide-in">
+                                <div className="bg-llm-chinois text-primary-foreground p-4 rounded-2xl ml-8 slide-in rounded-tr-none">
                                     <p>Je m'appelle Sarah. Enchanté!</p>
                                 </div>
-                                <div className="bg-default-100 p-4 rounded-2xl slide-in">
+                                <div className="bg-default-100 p-4 rounded-2xl slide-in rounded-tl-none">
                                     <p className="text-foreground">Excellent! Your pronunciation is great. Now let's practice asking someone their name...</p>
                                 </div>
                                 <div className="flex gap-2 px-4">
