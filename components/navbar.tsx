@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link"
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 
 export const AcmeLogo = () => {
@@ -27,10 +28,10 @@ export default function App() {
   ]
 
   return (
-    <div className="relative flex shrink-0 h-16 items-center px-4">
-      <div className="flex items-center mr-4 z-10">
-        <AcmeLogo />
-        <p className="ml-2"><b>LinguistLM</b></p>
+    <div className="bg-default-50 relative flex shrink-0 h-16 items-center pl-2 pr-4">
+      <div className="flex items-center z-10 gap-2">
+  <Image src="/LinguistLmWhite.jpg" alt="Linguist logo" width={144} height={72} />
+  {/* <p className="m-0 text-xl"><b>LinguistLM</b></p> */}
       </div>
 
       {/* Center the nav items: absolute center of the navbar */}

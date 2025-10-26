@@ -35,7 +35,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 
 			<body
 				className={clsx(
-					"dark:text-llm-lace text-llm-masala dark:bg-llm-masala bg-llm-lace font-sans antialiased",
+					"dark:text-llm-lace text-llm-masala bg-llm-lace dark:bg-default-50 font-sans antialiased",
 					fontSans.variable,
 				)}
 			>
