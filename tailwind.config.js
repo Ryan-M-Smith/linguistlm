@@ -17,8 +17,9 @@ const config = {
 				"llm-chinois": 		"#255757",
 				"llm-sea-glass": 	"#77C5C5",
 				"llm-blue-flower": 	"#97E5E5",
-				"llm-masala": 		"#302C2A",
 				"llm-lace": 		"#F2EFDF",
+				"llm-masala": 		"#302C2A",
+				"llm-golden": 		"#FFD966"
 			}
 		},
 	},
