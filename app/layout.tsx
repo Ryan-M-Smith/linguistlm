@@ -35,21 +35,20 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 
 			<body
 				className={clsx(
-					"text-foreground bg-llm-masala font-sans antialiased",
+					"dark:text-llm-lace text-llm-masala dark:bg-llm-masala bg-llm-lace font-sans antialiased",
 					fontSans.variable,
 				)}
 			>
-				<LlmNavbar/>
 				<Providers themeProps={{ attribute: "class", enableSystem: true }}>
 					<div className="relative flex flex-col h-screen">
-						<main>
+						<LlmNavbar/>
+						<main className="h-full">
 							{children}
 						</main>
 					</div>
 				</Providers>
+				<Analytics/>
 			</body>
-
-			<Analytics/>
 		</html>
 	);
 }

@@ -1,11 +1,7 @@
 "use client";
 
-import {Navbar, NavbarBrand, NavbarContent, NavbarItem} from "@heroui/navbar";
-import {Button} from "@heroui/button";
-import {Link} from "@heroui/link";
+import Link from "next/link"
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
-import path from "path";
 
 export const AcmeLogo = () => {
   return (
@@ -31,32 +27,31 @@ export default function App() {
   ]
 
   return (
-    <div className="flex items-center justify-center">
-      <Navbar className="bg-llm-masala">
-        <NavbarBrand>
-          <AcmeLogo />
-          <p className="font-bold text-llm-sea-glass">ACME</p>
-        </NavbarBrand>
-        <NavbarContent>
+    <div className="relative flex shrink-0 h-16 items-center px-4">
+      <div className="flex items-center mr-4 z-10">
+        <AcmeLogo />
+        <p className="ml-2"><b>LinguistLM</b></p>
+      </div>
+
+      {/* Center the nav items: absolute center of the navbar */}
+      <div className="absolute left-1/2 transform -translate-x-1/2 flex items-center space-x-6 z-0">
         {navItems.map((item) => {
           const isActive = pathname === item.href;
           return (
-            <NavbarItem key={item.href} isActive={isActive}>
-              <Link
-                href={item.href}
-                className={`transition-colors duration-300 font-medium ${
-                  isActive
-                    ? "text-llm-sea-glass border-b-2 border-llm-sea-glass"
-                    : "text-llm-lace hover:text-llm-sea-glass"
-                }`}
-              >
-                {item.name}
-              </Link>
-            </NavbarItem>
+            <Link
+              key={item.name}
+              href={item.href}
+              className={`transition-colors duration-300 font-medium ${
+                isActive
+                  ? "text-llm-sea-glass border-b-2 border-llm-sea-glass"
+                  : "hover:text-llm-sea-glass"
+              }`}
+            >
+              {item.name}
+            </Link>
           );
         })}
-      </NavbarContent>
-      </Navbar>
+      </div>
     </div>
   );
 }
