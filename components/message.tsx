@@ -23,7 +23,7 @@ export default function Message({ className, children, role, isLoading, isFirst 
 				<div className="flex justify-end w-full">
 					<div className={`flex flex-col items-end relative max-w-[85%] sm:max-w-[75%]`}>
 						{/* Bubble */}
-						<div className="rounded-2xl rounded-tr-none dark:bg-default-100 bg-blue-100 px-3 sm:px-5 py-2 w-full wrap-break-word whitespace-normal overflow-hidden">
+						<div className="rounded-2xl rounded-tr-none dark:bg-default-200 bg-blue-100 px-3 sm:px-5 py-2 w-full wrap-break-word whitespace-normal overflow-hidden">
 							{children}
 						</div>
 					</div>
@@ -36,16 +36,18 @@ export default function Message({ className, children, role, isLoading, isFirst 
 		return (
 			<div className="flex w-full justify-center px-2 sm:px-4 my-4" data-role="model">
 				<div className="text-left text-base sm:text-lg text-zinc-100 whitespace-pre-line">
-					{isLoading ? (
-						<div className="flex items-center gap-2">
-							<span> Waiting on LinguistLM </span>
-							<Spinner
-								className="flex items-center"
-								variant="dots"
-								color="default"
-							/>
-						</div>
-					) : children}
+					<div className="rounded-2xl rounded-tl-none dark:bg-default-200 bg-blue-100 px-3 sm:px-5 py-2 w-full wrap-break-word whitespace-normal overflow-hidden">
+						{isLoading ? (
+							<div className="flex items-center gap-2">
+								<span> Waiting on LinguistLM </span>
+								<Spinner
+									className="flex items-center"
+									variant="dots"
+									color="default"
+								/>
+							</div>
+						) : children}
+					</div>
 				</div>
 			</div>
 		);

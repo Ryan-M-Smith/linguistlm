@@ -96,9 +96,9 @@ function ChatBoxImpl({ className, endpoint = "/api/explainations" }: ChatBoxProp
 	return (
 		<div
 			className={`
-				${className} border-1 dark:bg-default-50 dark:border-llm-sea-glass 
+				${className} border-4 dark:bg-default-100 dark:border-llm-chinois 
 				bg-llm-blue-flower/10 border-llm-masala w-[30%] rounded-xl flex
-				flex-col h-full min-h-0 max-h-full hover:bg-llm-blue-flower/10 hover:dark:bg-default-50
+				flex-col h-full min-h-0 max-h-full hover:bg-llm-blue-flower/10 hover:dark:bg-default-100
 				hover:border-llm-masala transition-none overflow-none
 			`}
 		>	

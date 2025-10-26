@@ -29,10 +29,10 @@ export default function InputBox({ className, onSubmit }: InputBoxProps): JSX.El
 	const SendButton = () => (
 		<Button
 			className={`
-				absolute right-3 bottom-3 bg-llm-masala text-white
+				absolute right-3 bottom-3 bg-transparent text-white
 				rounded-full shadow-sm hover:bg-llm-sea-glass
 				focus:outline-none focus:ring-2 focus:ring-llm-sea-glass z-10
-				border-2 dark:border-llm-sea-glass border-llm-masala
+				border-2 dark:border-llm-chinois border-llm-masala
 			`}
 			radius="full"
 			variant="bordered"
@@ -52,9 +52,9 @@ export default function InputBox({ className, onSubmit }: InputBoxProps): JSX.El
 		<Textarea
 			className="p-4 overflow-y-auto resize-none"
 			classNames={{
-				inputWrapper: `border-1 dark:bg-default-50 dark:border-llm-sea-glass
-								dark:bg-llm-masala bg-llm-lace hover:bg-llm-lace
-								hover:dark:bg-llm-masala transition-none`
+				inputWrapper: `border-4 dark:bg-llm-sea-glass/20 dark:border-llm-chinois
+								bg-llm-lace hover:bg-llm-lace
+								hover:dark:bg-llm-sea-glass/20 transition-none`
 			}}
 			value={query}
 			placeholder="Ask for help with your writing..."
