@@ -15,10 +15,10 @@ export default function Read(): JSX.Element {
 	const SendButton = () => (
 		<Button
 			className={`
-				absolute right-3 bottom-3 bg-llm-masala text-white
+				absolute right-3 bottom-3 bg-llm-default-50 text-white
 				rounded-full shadow-sm hover:bg-llm-sea-glass
 				focus:outline-none focus:ring-2 focus:ring-llm-sea-glass z-10
-				border-2 dark:border-llm-sea-glass border-llm-masala
+				border-2 dark:border-llm-chinois border-llm-masala
 			`}
 			radius="full"
 			variant="bordered"
@@ -68,8 +68,8 @@ export default function Read(): JSX.Element {
                     />
                     <div
                         className={`
-                            h-full p-4 border-1 dark:bg-default-50 dark:border-llm-sea-glass
-                            bg-llm-blue-flower/10 border-llm-masala resize-none rounded-xl
+                            h-full p-4 border-4 dark:border-llm-chinois
+                            bg-default-100 border-llm-masala resize-none rounded-xl
                             outline-none text relative
                         `}
                     >
@@ -93,9 +93,9 @@ export default function Read(): JSX.Element {
 
                         <Button
 							className={`
-								absolute justify-start right-4 bottom-4 bg-llm-masala text-white
+								absolute justify-start right-4 bottom-4 bg-default-50 text-white
 								rounded-full p-2 shadow-lg hover:bg-llm-sea-glass focus:outline-none
-								focus:ring-2 focus:ring-llm-sea-glass z-10
+								focus:ring-2 focus:ring-llm-sea-glass z-10 border-2 dark:border-llm-chinois border-llm-masala
 							`}
 							startContent={<HiOutlineUpload size={24}/>}
 							onPress={() => {
@@ -114,18 +114,18 @@ export default function Read(): JSX.Element {
                 </Drop>
                 <div
                     className={`
-                        border-1 dark:bg-default-50 dark:border-llm-sea-glass bg-llm-blue-flower/10
+                        border-4 dark:bg-default-100 dark:border-llm-chinois bg-llm-blue-flower/10
                         border-llm-masala w-[30%] rounded-xl flex flex-col justify-end
-                        hover:bg-llm-blue-flower/10 hover:dark:bg-default-50
+                        hover:bg-llm-blue-flower/10 hover:dark:bg-default-100
                         hover:border-llm-masala transition-none
                     `}
                 >
                     <Textarea
                         className="p-4 overflow-y-auto resize-none"
                         classNames={{
-                            inputWrapper: `border-1 dark:bg-default-50 dark:border-llm-sea-glass
-                                           dark:bg-llm-masala bg-llm-lace hover:bg-llm-lace
-                                           hover:dark:bg-llm-masala transition-none`
+                            inputWrapper: `border-4 dark:bg-llm-sea-glass/60 dark:border-llm-chinois
+                                           dark:bg-llm-chinois/20 bg-llm-lace hover:bg-llm-lace
+                                           hover:dark:bg-llm-chinois/20 transition-none`
                         }}
                         radius="lg"
                         endContent={<SendButton />}

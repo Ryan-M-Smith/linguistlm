@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 15 460 90">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@700&amp;display=swap');
+      
+      .logo-text {
+        font-family: 'Rubik', sans-serif;
+        font-weight: 700;
+      }
+      
+      .accent-letter {
+        fill: #77C5C5;
+      }
+      
+      .main-letter {
+        fill: #255757;
+      }
+      
+      .chat-box {
+        fill: #77C5C5;
+      }
+      
+      .chat-text {
+        fill: #302c2a;
+        font-family: 'Rubik', sans-serif;
+        font-weight: 700;
+      }
+    </style>
+  </defs>
+  
+  <!-- Main Logo Text -->
+  <text x="10" y="80" class="logo-text" font-size="72">
+    <tspan class="accent-letter">L</tspan><tspan class="main-letter">INGUIST</tspan>
+  </text>
+  
+  <!-- Chat Bubble with IM -->
+  <g transform="translate(360, 25)">
+    <!-- Bubble shape -->
+    <rect class="chat-box" x="0" y="0" width="90" height="60" rx="12"/>
+    <!-- Chat tail -->
+    <path class="chat-box" d="M 15 60 L 10 70 L 25 60 Z"/>
+    <!-- IM text -->
+    <text x="45" y="33" class="chat-text" font-size="32" text-anchor="middle" dominant-baseline="middle">LM</text>
+  </g>
+</svg>

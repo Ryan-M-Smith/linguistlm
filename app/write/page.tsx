@@ -11,10 +11,10 @@ export default function Write(): JSX.Element {
 	const SendButton = () => (
 		<Button
 			className={`
-				absolute right-3 bottom-3 bg-llm-masala text-white
+				absolute right-3 bottom-3 bg-transparent text-white
 				rounded-full shadow-sm hover:bg-llm-sea-glass
 				focus:outline-none focus:ring-2 focus:ring-llm-sea-glass z-10
-				border-2 dark:border-llm-sea-glass border-llm-masala
+				border-2 dark:border-llm-chinois border-llm-masala
 			`}
 			radius="full"
 			variant="bordered"
@@ -28,7 +28,7 @@ export default function Write(): JSX.Element {
 			<div className="flex gap-x-4 w-[90%] p-4">
 				<textarea
 					className={`
-						flex-1 h-full p-8 border-1 dark:bg-default-50 dark:border-llm-sea-glass
+						flex-1 h-full p-8 border-4 dark:bg-default-100 dark:border-llm-chinois
 						bg-llm-blue-flower/10 border-llm-masala rounded-xl text resize-none
 						outline-none text-sm placeholder:opacity-60
 					`}
@@ -39,18 +39,18 @@ export default function Write(): JSX.Element {
 				/>
 				<div
 					className={`
-						border-1 dark:bg-default-50 dark:border-llm-sea-glass bg-llm-blue-flower/10
+						border-4 dark:bg-default-100 dark:border-llm-chinois bg-llm-blue-flower/10
 						border-llm-masala w-[30%] rounded-xl flex flex-col justify-end
-						hover:bg-llm-blue-flower/10 hover:dark:bg-default-50
+						hover:bg-llm-blue-flower/10 hover:dark:bg-default-100
 						hover:border-llm-masala transition-none
 					`}
 				>
 					<Textarea
 						className="p-4 overflow-y-auto resize-none"
 						classNames={{
-							inputWrapper: `border-1 dark:bg-default-50 dark:border-llm-sea-glass
-										   dark:bg-llm-masala bg-llm-lace hover:bg-llm-lace
-										   hover:dark:bg-llm-masala transition-none`
+							inputWrapper: `border-4 dark:bg-default-50 dark:border-llm-chinois
+										   dark:bg-llm-chinois/20 bg-llm-lace hover:bg-llm-lace
+										   hover:dark:bg-llm-chinois/20 transition-none`
 						}}
 						radius="lg"
 						endContent={<SendButton />}
