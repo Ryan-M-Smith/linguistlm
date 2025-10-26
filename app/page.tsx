@@ -22,7 +22,7 @@ export default function Home(): JSX.Element {
                         </div>
 
                         <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                            <a href="#" className="bg-llm-chinois text-primary-foreground px-8 py-4 rounded-full font-semibold text-lg hover:shadow-xl hover:-translate-y-1 transition-all">Start Learning Free</a>
+                            <a href="/learn" className="bg-llm-chinois text-primary-foreground px-8 py-4 rounded-full font-semibold text-lg hover:shadow-xl hover:-translate-y-1 transition-all">Start Learning Free</a>
                             <a href="#how-it-works" className="bg-default-100 text-foreground px-8 py-4 rounded-full font-semibold text-lg border-2 border-default-200 hover:shadow-xl hover:-translate-y-1 transition-all">Explore Features</a>
                         </div>
                     </div>
@@ -138,51 +138,51 @@ export default function Home(): JSX.Element {
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
                         <div className="bg-llm-chinois p-6 rounded-2xl text-center hover:shadow-lg hover:-translate-y-1 transition-all">
                             <div className="text-4xl mb-3">🇪🇸</div>
-                            <p className="font-semibold text-foreground">Spanish</p>
+                            <p className="font-semibold text-llm-lace dark:text-foreground">Spanish</p>
                         </div>
                         <div className="bg-llm-chinois p-6 rounded-2xl text-center hover:shadow-lg hover:-translate-y-1 transition-all">
                             <div className="text-4xl mb-3">🇫🇷</div>
-                            <p className="font-semibold text-foreground">French</p>
+                            <p className="font-semibold text-llm-lace dark:text-foreground">French</p>
                         </div>
                         <div className="bg-llm-chinois p-6 rounded-2xl text-center hover:shadow-lg hover:-translate-y-1 transition-all">
                             <div className="text-4xl mb-3">🇩🇪</div>
-                            <p className="font-semibold text-foreground">German</p>
+                            <p className="font-semibold text-llm-lace dark:text-foreground">German</p>
                         </div>
                         <div className="bg-llm-chinois p-6 rounded-2xl text-center hover:shadow-lg hover:-translate-y-1 transition-all">
                             <div className="text-4xl mb-3">🇮🇹</div>
-                            <p className="font-semibold text-foreground">Italian</p>
+                            <p className="font-semibold text-llm-lace dark:text-foreground">Italian</p>
                         </div>
                         <div className="bg-llm-chinois p-6 rounded-2xl text-center hover:shadow-lg hover:-translate-y-1 transition-all">
                             <div className="text-4xl mb-3">🇯🇵</div>
-                            <p className="font-semibold text-foreground">Japanese</p>
+                            <p className="font-semibold text-llm-lace dark:text-foreground">Japanese</p>
                         </div>
                         <div className="bg-llm-chinois p-6 rounded-2xl text-center hover:shadow-lg hover:-translate-y-1 transition-all">
                             <div className="text-4xl mb-3">🇨🇳</div>
-                            <p className="font-semibold text-foreground">Mandarin</p>
+                            <p className="font-semibold text-llm-lace dark:text-foreground">Mandarin</p>
                         </div>
                         <div className="bg-llm-chinois p-6 rounded-2xl text-center hover:shadow-lg hover:-translate-y-1 transition-all">
                             <div className="text-4xl mb-3">🇰🇷</div>
-                            <p className="font-semibold text-foreground">Korean</p>
+                            <p className="font-semibold text-llm-lace dark:text-foreground">Korean</p>
                         </div>
                         <div className="bg-llm-chinois p-6 rounded-2xl text-center hover:shadow-lg hover:-translate-y-1 transition-all">
                             <div className="text-4xl mb-3">🇵🇹</div>
-                            <p className="font-semibold text-foreground">Portuguese</p>
+                            <p className="font-semibold text-llm-lace dark:text-foreground">Portuguese</p>
                         </div>
                         <div className="bg-llm-chinois p-6 rounded-2xl text-center hover:shadow-lg hover:-translate-y-1 transition-all">
                             <div className="text-4xl mb-3">🇷🇺</div>
-                            <p className="font-semibold text-foreground">Russian</p>
+                            <p className="font-semibold text-llm-lace dark:text-foreground">Russian</p>
                         </div>
                         <div className="bg-llm-chinois p-6 rounded-2xl text-center hover:shadow-lg hover:-translate-y-1 transition-all">
                             <div className="text-4xl mb-3">🇸🇦</div>
-                            <p className="font-semibold text-foreground">Arabic</p>
+                            <p className="font-semibold text-llm-lace dark:text-foreground">Arabic</p>
                         </div>
                         <div className="bg-llm-chinois p-6 rounded-2xl text-center hover:shadow-lg hover:-translate-y-1 transition-all">
                             <div className="text-4xl mb-3">🇮🇳</div>
-                            <p className="font-semibold text-foreground">Hindi</p>
+                            <p className="font-semibold text-llm-lace dark:text-foreground">Hindi</p>
                         </div>
                         <div className="bg-llm-chinois p-6 rounded-2xl text-center hover:shadow-lg hover:-translate-y-1 transition-all">
                             <div className="text-4xl mb-3">🌍</div>
-                            <p className="font-semibold text-foreground">+40 More</p>
+                            <p className="font-semibold text-llm-lace dark:text-foreground">+40 More</p>
                         </div>
                     </div>
 
@@ -225,7 +225,7 @@ export default function Home(): JSX.Element {
                 <div className="max-w-4xl mx-auto text-center">
                     <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">Ready to Start Your Language Journey?</h2>
                     <p className="text-xl mb-10 opacity-95">Join learners worldwide who are achieving fluency with AI-powered tutoring. Start learning today, completely free.</p>
-                    <a href="#" className="inline-block bg-llm-chinois text-foreground px-10 py-4 rounded-full font-semibold text-lg hover:shadow-2xl hover:-translate-y-1 transition-all">Start Learning Free</a>
+                    <a href="/learn" className="inline-block bg-llm-chinois text-llm-lace dark:text-foreground px-10 py-4 rounded-full font-semibold text-lg hover:shadow-2xl hover:-translate-y-1 transition-all">Start Learning Free</a>
                     <p className="mt-6 text-sm opacity-80">No credit card required • Access all features • Cancel anytime</p>
                 </div>
             </section>

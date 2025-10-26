@@ -28,7 +28,7 @@ export default function App() {
   ]
 
   return (
-    <div className="bg-default-50 relative flex shrink-0 h-16 items-center pl-2 pr-4">
+    <div className="bg-llm-lace dark:bg-default-50 relative flex shrink-0 h-16 items-center pl-2 pr-4">
       <div className="flex items-center z-10 gap-2 justify-center">
         <Link href="/">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 15 460 90" className="w-[200px] h-auto">

@@ -96,10 +96,10 @@ function ChatBoxImpl({ className, endpoint = "/api/explainations" }: ChatBoxProp
 	return (
 		<div
 			className={`
-				${className} border-4 dark:bg-default-100 dark:border-llm-chinois 
-				bg-llm-blue-flower/10 border-llm-masala w-[30%] rounded-xl flex
-				flex-col h-full min-h-0 max-h-full hover:bg-llm-blue-flower/10 hover:dark:bg-default-100
-				hover:border-llm-masala transition-none overflow-none
+				${className} border-4 dark:bg-default-100 border-llm-chinois 
+				bg-llm-blue-flower/40 w-[30%] rounded-xl flex
+				flex-col h-full min-h-0 max-h-full hover:bg-llm-blue-flower/40 hover:dark:bg-default-100
+				transition-none overflow-none
 			`}
 		>	
 			<div ref={listRef} id={`chat-list-${listId}`} className="flex-1 min-h-0 overflow-y-auto px-2 sm:px-4 pt-2">

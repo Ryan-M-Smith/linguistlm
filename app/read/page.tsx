@@ -114,8 +114,8 @@ export default function Read(): JSX.Element {
                     />
                     <div
                         className={`
-                            h-full p-4 border-4 dark:border-llm-chinois
-                            bg-default-100 border-llm-masala resize-none rounded-xl
+                            h-full p-4 border-4 border-llm-chinois
+                            bg-llm-blue-flower/40 dark:bg-default-100 resize-none rounded-xl
                             outline-none text relative
                         `}
                     >
@@ -143,7 +143,7 @@ export default function Read(): JSX.Element {
                         ) : (
                             <Button
                                 className={`
-                                    absolute justify-start right-4 bottom-4 bg-default-50 text-white
+                                    absolute justify-start right-4 bottom-4 bg-default-50 text-llm-masala dark:text-white
                                     rounded-full p-2 shadow-lg hover:bg-llm-sea-glass focus:outline-none
                                     focus:ring-2 focus:ring-llm-sea-glass z-10 border-2 dark:border-llm-chinois border-llm-masala
                                 `}
