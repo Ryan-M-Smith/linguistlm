@@ -24,7 +24,7 @@ export function getHighlightedHtml(text: string, errors: GrammarError[], ignored
 		const end = Math.max(start, rawE);
 		// Add plain text before the highlight
 		result += escapeHtml(text.slice(lastIdx, start));
-		// Build the highlight span
+		// Build the highlight span with tooltip data
 		const errorMsg = escapeHtml(err.error).replace(/\"/g, '&quot;');
 		const suggestionMsg = escapeHtml(err.suggestion).replace(/\"/g, '&quot;');
 		const spanText = escapeHtml(text.slice(start, end));

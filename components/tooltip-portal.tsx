@@ -6,12 +6,8 @@ import { createPortal } from "react-dom";
 type Detail = { start: number; end: number; error: string; suggestion: string; span?: string };
 
 export function TooltipPortal({
-	onAccept,
-	onDismiss,
 	onExplain,
 }: {
-	onAccept: (d: { start: number; end: number; suggestion: string; error?: string; span?: string }) => void;
-	onDismiss: (d: { start: number; end: number; error: string }) => void;
 	onExplain: (d: { start?: number; end?: number; error: string; span?: string }) => void;
 }) {
 	const [mounted, setMounted] = useState(false);
@@ -59,24 +55,18 @@ export function TooltipPortal({
 
 		const buildContent = (target: HTMLElement) => {
 			const error = target.getAttribute('data-error') || '';
-			const suggestion = target.getAttribute('data-suggestion') || '';
-			if (!error || !suggestion || !tooltipRef.current) return false;
+			if (!error || !tooltipRef.current) return false;
 			const tooltip = tooltipRef.current;
 			tooltip.innerHTML = '';
 			const dark = applyTheme(tooltip);
 			const mk = (tag: string, css: string, text?: string) => { const el = document.createElement(tag); el.style.cssText = css; if (text) el.innerHTML = text; return el; };
 			const errorBubble = mk('div', `background:${dark ? '#7f1d1d' : '#fee2e2'};color:${dark ? '#fecaca' : '#991b1b'};padding:10px 14px;border-radius:8px;font-size:0.9rem;font-weight:500;border-left:4px solid #dc2626;`, error);
-			const suggestionBubble = mk('div', `background:${dark ? '#064e3b' : '#d1fae5'};color:${dark ? '#6ee7b7' : '#065f46'};padding:10px 14px;border-radius:8px;font-size:0.9rem;font-weight:500;border-left:4px solid #10b981;`, '✓ ' + suggestion);
-			const controls = mk('div', 'display:flex;gap:8px;justify-content:flex-end;margin-top:6px;');
-			const btn = (label: string, bg: string) => mk('button', `background:${bg};color:white;padding:6px 10px;border-radius:6px;font-size:0.85rem;font-weight:600;border:none;cursor:pointer;`, label) as HTMLButtonElement;
-			const dismissBtn = btn('Dismiss', '#6b7280');
+			const controls = mk('div', 'display:flex;gap:8px;justify-content:center;margin-top:6px;');
+			const btn = (label: string, bg: string) => mk('button', `background:${bg};color:white;padding:8px 16px;border-radius:6px;font-size:0.9rem;font-weight:600;border:none;cursor:pointer;`, label) as HTMLButtonElement;
 			const explainBtn = btn('Explain', '#3b82f6');
-			const acceptBtn = btn('Accept', '#10b981');
-			controls.append(dismissBtn, explainBtn, acceptBtn);
-			dismissBtn.onclick = (ev) => { ev.preventDefault(); ev.stopPropagation(); const start = parseInt(target.getAttribute('data-start') || '0', 10); const end = parseInt(target.getAttribute('data-end') || '0', 10); onDismiss({ start, end, error }); hideNow(); };
-			explainBtn.onclick = (ev) => { ev.preventDefault(); ev.stopPropagation(); const start = parseInt(target.getAttribute('data-start') || '0', 10); const end = parseInt(target.getAttribute('data-end') || '0', 10); const span = target.innerText || ''; onExplain({ start, end, error, span }); };
-			acceptBtn.onclick = (ev) => { ev.preventDefault(); ev.stopPropagation(); const start = parseInt(target.getAttribute('data-start') || '0', 10); const end = parseInt(target.getAttribute('data-end') || '0', 10); const span = target.innerText || ''; onAccept({ start, end, suggestion, error, span }); hideNow(); };
-			tooltip.append(errorBubble, suggestionBubble, controls);
+			controls.append(explainBtn);
+			explainBtn.onclick = (ev) => { ev.preventDefault(); ev.stopPropagation(); const start = parseInt(target.getAttribute('data-start') || '0', 10); const end = parseInt(target.getAttribute('data-end') || '0', 10); const span = target.innerText || ''; onExplain({ start, end, error, span }); hideNow(); };
+			tooltip.append(errorBubble, controls);
 			return true;
 		};
 
@@ -142,7 +132,7 @@ export function TooltipPortal({
 			window.removeEventListener('resize', onResize);
 		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [onAccept, onDismiss, onExplain]);
+	}, [onExplain]);
 
 	if (!mounted) return null;
 	return createPortal(<></>, document.body);
