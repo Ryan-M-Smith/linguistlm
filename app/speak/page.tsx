@@ -72,10 +72,10 @@ export default function Speak(): JSX.Element {
 				</div>
 			</div>
 
-			{/* Main content area */}
-			<div className="flex gap-x-4 w-[90%] flex-1 pb-4 min-h-0">
-				{/* Left side - Conversation display */}
-				<div className="flex-2 flex flex-col min-w-0 min-h-0">
+		{/* Main content area */}
+		<div className="flex flex-col md:flex-row gap-4 w-[90%] flex-1 pb-4 min-h-0">
+			{/* Left side - Conversation display */}
+			<div className="flex-1 md:flex-2 flex flex-col min-w-0 min-h-0">
 					<div className="flex items-center justify-between mb-2 px-1">
 						<label className="text-sm font-semibold text-default-700">Conversation</label>
 						<div className="flex items-center gap-1">
@@ -150,24 +150,24 @@ export default function Speak(): JSX.Element {
 					</div>
 				</div>
 
-				{/* Right side - Controls and info */}
-				<div className="flex-1 flex flex-col min-w-[320px] max-w-[400px]">
-					<div className="flex items-center justify-between mb-2 px-1">
-						<label className="text-sm font-semibold text-default-700">Voice Controls</label>
-						<div className="flex items-center gap-1">
-							<span className="w-2 h-2 bg-success rounded-full"></span>
-							<span className="text-xs text-default-500">Connected</span>
-						</div>
+			{/* Right side - Controls and info */}
+			<div className="flex-none md:flex-1 flex flex-col md:min-w-[320px] md:max-w-[400px]">
+				<div className="flex items-center justify-between mb-2 px-1">
+					<label className="text-sm font-semibold text-default-700">Voice Controls</label>
+					<div className="flex items-center gap-1">
+						<span className={`w-2 h-2 rounded-full ${isRecording ? 'bg-danger animate-pulse' : 'bg-success'}`}></span>
+						<span className="text-xs text-default-500">{isRecording ? 'Recording' : 'Connected'}</span>
 					</div>
-					<div
-						className={`
-							border-4 dark:bg-default-100 dark:border-llm-chinois bg-llm-blue-flower/10
-							border-llm-masala flex-1 rounded-2xl flex flex-col p-6
-							hover:border-llm-sea-glass hover:shadow-lg transition-all
-						`}
-					>
-						{/* Microphone button */}
-						<div className="flex-1 flex flex-col items-center justify-center gap-6">
+				</div>
+				<div
+					className={`
+						border-4 dark:bg-default-100 dark:border-llm-chinois bg-llm-blue-flower/10
+						border-llm-masala flex-1 rounded-2xl flex flex-col p-4 md:p-6
+						hover:border-llm-sea-glass hover:shadow-lg transition-all
+					`}
+				>
+					{/* Microphone button */}
+					<div className="flex-1 flex flex-col items-center justify-center gap-4 md:gap-6">
 							<div className="text-center">
 								<p className="text-sm font-semibold text-foreground mb-2">
 									{isRecording ? 'Listening to you...' : 'Start conversation'}
@@ -177,61 +177,65 @@ export default function Speak(): JSX.Element {
 								</p>
 							</div>
 
-							<button
-								onClick={toggleConversation}
-								disabled={!!apiError && !isRecording}
-								className={`
-									w-32 h-32 rounded-full flex items-center justify-center
-									transition-all shadow-lg hover:shadow-xl
-									${isRecording 
-										? 'bg-danger scale-110 animate-pulse' 
-										: 'bg-llm-chinois hover:scale-105'
-									}
-									disabled:opacity-50 disabled:cursor-not-allowed
-								`}
-							>
-								{isRecording ? (
-									<FaStop className="text-white" size={40} />
-								) : (
-									<FaMicrophone className="text-white" size={40} />
-								)}
-							</button>
-
-							{isRecording && (
-								<div className="flex gap-1">
-									<div className="w-1 h-8 bg-danger rounded-full animate-pulse"></div>
-									<div className="w-1 h-12 bg-danger/80 rounded-full animate-pulse" style={{ animationDelay: '0.1s' }}></div>
-									<div className="w-1 h-16 bg-danger/60 rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
-									<div className="w-1 h-12 bg-danger/80 rounded-full animate-pulse" style={{ animationDelay: '0.3s' }}></div>
-									<div className="w-1 h-8 bg-danger rounded-full animate-pulse" style={{ animationDelay: '0.4s' }}></div>
-								</div>
+						<button
+							onClick={toggleConversation}
+							disabled={!!apiError && !isRecording}
+							className={`
+								w-24 h-24 md:w-32 md:h-32 rounded-full flex items-center justify-center
+								transition-all shadow-lg hover:shadow-xl
+								${isRecording 
+									? 'bg-danger scale-110 animate-pulse' 
+									: 'bg-llm-chinois hover:scale-105'
+								}
+								disabled:opacity-50 disabled:cursor-not-allowed
+							`}
+						>
+							{isRecording ? (
+								<FaStop className="text-white" size={40} />
+							) : (
+								<FaMicrophone className="text-white" size={40} />
 							)}
+						</button>
+					</div>					{/* Session stats */}
+					<div className="hidden md:block space-y-3 mt-6 pt-6 border-t-2 border-default-200">
+						<div className="bg-llm-lace dark:bg-default-50 p-3 rounded-xl">
+							<p className="text-xs text-default-500 mb-1">Messages</p>
+							<p className="text-lg font-bold text-foreground">
+								{conversationLog.filter(m => m.type !== 'status').length}
+							</p>
 						</div>
-
-						{/* Session stats */}
-						<div className="space-y-3 mt-6 pt-6 border-t-2 border-default-200">
-							<div className="bg-llm-lace dark:bg-default-50 p-3 rounded-xl">
-								<p className="text-xs text-default-500 mb-1">Messages</p>
-								<p className="text-lg font-bold text-foreground">
-									{conversationLog.filter(m => m.type !== 'status').length}
-								</p>
-							</div>
-							<div className="bg-llm-lace dark:bg-default-50 p-3 rounded-xl">
-								<p className="text-xs text-default-500 mb-1">Your Turns</p>
-								<p className="text-lg font-bold text-foreground">
-									{conversationLog.filter(m => m.type === 'user').length}
-								</p>
-							</div>
-							<div className="bg-llm-lace dark:bg-default-50 p-3 rounded-xl">
-								<p className="text-xs text-default-500 mb-1">AI Responses</p>
-								<p className="text-lg font-bold text-llm-chinois">
-									{conversationLog.filter(m => m.type === 'model').length}
-								</p>
-							</div>
+						<div className="bg-llm-lace dark:bg-default-50 p-3 rounded-xl">
+							<p className="text-xs text-default-500 mb-1">Your Turns</p>
+							<p className="text-lg font-bold text-foreground">
+								{conversationLog.filter(m => m.type === 'user').length}
+							</p>
 						</div>
+						<div className="bg-llm-lace dark:bg-default-50 p-3 rounded-xl">
+							<p className="text-xs text-default-500 mb-1">AI Responses</p>
+							<p className="text-lg font-bold text-llm-chinois">
+								{conversationLog.filter(m => m.type === 'model').length}
+							</p>
+						</div>
+					</div>
 
-						{/* Clear conversation button */}
-						<Button
+					{/* Compact mobile stats */}
+					<div className="flex md:hidden items-center justify-between w-full gap-2 mt-3">
+						<div className="flex-1 bg-llm-lace dark:bg-default-50 p-2 rounded-md text-center">
+							<p className="text-xs text-default-500">Msgs</p>
+							<p className="text-sm font-bold text-foreground">{conversationLog.filter(m => m.type !== 'status').length}</p>
+						</div>
+						<div className="flex-1 bg-llm-lace dark:bg-default-50 p-2 rounded-md text-center">
+							<p className="text-xs text-default-500">You</p>
+							<p className="text-sm font-bold text-foreground">{conversationLog.filter(m => m.type === 'user').length}</p>
+						</div>
+						<div className="flex-1 bg-llm-lace dark:bg-default-50 p-2 rounded-md text-center">
+							<p className="text-xs text-default-500">AI</p>
+							<p className="text-sm font-bold text-llm-chinois">{conversationLog.filter(m => m.type === 'model').length}</p>
+						</div>
+					</div>
+
+					{/* Clear conversation button */}
+					<Button
 							className="mt-4 bg-default-200 dark:bg-default-50 hover:bg-llm-sea-glass transition-all"
 							variant="flat"
 							fullWidth

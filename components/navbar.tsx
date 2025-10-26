@@ -3,6 +3,7 @@
 import Link from "next/link"
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
 
 export const AcmeLogo = () => {
   return (
@@ -19,6 +20,7 @@ export const AcmeLogo = () => {
 
 export default function App() {
   const pathname = usePathname();
+  const [open, setOpen] = useState(false);
   const navItems = [
     { name: "Home", href: "/" },
     { name: "Read", href: "/read" },
@@ -28,10 +30,11 @@ export default function App() {
   ]
 
   return (
-    <div className="bg-llm-lace dark:bg-default-50 relative flex shrink-0 h-16 items-center pl-2 pr-4">
-      <div className="flex items-center z-10 gap-2 justify-center">
-        <Link href="/">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 15 460 90" className="w-[200px] h-auto">
+    <header className="bg-llm-lace dark:bg-default-50 relative flex shrink-0 h-16 items-center pl-2 pr-4">
+      {/* Left: Logo */}
+      <div className="flex items-center z-10 gap-2">
+        <Link href="/" aria-label="LinguistLM home" className="block">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 15 460 90" className="w-[140px] sm:w-[180px] md:w-[200px] h-auto">
             <defs>
               <style>
                 {`
@@ -64,8 +67,8 @@ export default function App() {
         </Link>
       </div>
 
-      {/* Center the nav items: absolute center of the navbar */}
-      <div className="absolute left-1/2 transform -translate-x-1/2 flex items-center space-x-6 z-0">
+      {/* Center nav for md+ screens (hidden on small screens) */}
+      <nav className="hidden md:absolute md:left-1/2 md:transform md:-translate-x-1/2 md:flex md:items-center md:space-x-6 md:z-0" aria-label="Primary navigation">
         {navItems.map((item) => {
           const isActive = pathname === item.href;
           return (
@@ -82,7 +85,47 @@ export default function App() {
             </Link>
           );
         })}
+      </nav>
+
+      {/* Right: mobile hamburger */}
+      <div className="ml-auto flex items-center z-20">
+        <button
+          onClick={() => setOpen((s) => !s)}
+          aria-controls="mobile-menu"
+          aria-expanded={open}
+          aria-label={open ? "Close menu" : "Open menu"}
+          className="p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-llm-sea-glass md:hidden"
+        >
+          <svg className="w-6 h-6 text-default-700 dark:text-llm-lace" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            {open ? (
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            ) : (
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            )}
+          </svg>
+        </button>
       </div>
-    </div>
+
+      {/* Mobile menu dropdown */}
+      <div id="mobile-menu" className={`md:hidden absolute top-full left-0 right-0 bg-llm-lace dark:bg-default-50 border-t border-default-200 dark:border-default-800 z-20 ${open ? 'block' : 'hidden'}`}>
+        <div className="flex flex-col px-4 py-3 space-y-2">
+          {navItems.map((item) => {
+            const isActive = pathname === item.href;
+            return (
+              <Link
+                key={item.name}
+                href={item.href}
+                onClick={() => setOpen(false)}
+                className={`block w-full text-left transition-colors duration-200 py-2 px-2 rounded-md ${
+                  isActive ? 'text-llm-sea-glass bg-default-100 dark:bg-default-900' : 'hover:text-llm-sea-glass hover:bg-default-100 dark:hover:bg-default-900'
+                }`}
+              >
+                {item.name}
+              </Link>
+            );
+          })}
+        </div>
+      </div>
+    </header>
   );
 }

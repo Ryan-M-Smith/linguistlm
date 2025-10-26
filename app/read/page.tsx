@@ -100,7 +100,7 @@ export default function Read(): JSX.Element {
                 </div>
             </div>
 
-            <div className="flex gap-x-4 w-[90%] p-4 flex-1 min-h-0">
+            <div className="flex flex-col md:flex-row gap-x-4 gap-y-4 w-[90%] p-4 flex-1 min-h-0">
                 <Drop
                     onDrop={ (file: File) => {
                         handleDrop(file);
@@ -181,7 +181,7 @@ export default function Read(): JSX.Element {
                         </div>
                     </div>
                 </Drop>
-                <ChatBox ref={chatRef} className="w-[30%]" endpoint="/api/reader"/>
+                <ChatBox ref={chatRef} className="w-full md:w-[30%]" endpoint="/api/reader"/>
             </div>
         </div>
     );

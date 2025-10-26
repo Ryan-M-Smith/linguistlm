@@ -117,7 +117,7 @@ export default function Write(): JSX.Element {
 			</div>
 
 			<div className="flex gap-x-4 w-[90%] p-4 h-full min-h-0 flex-col flex-1">
-				<div className="flex gap-x-4 flex-1 min-h-0">
+				<div className="flex flex-col md:flex-row gap-x-4 gap-y-4 flex-1 min-h-0">
 					<div className="flex-1 min-w-0 h-full relative">
 						<Highlighter
 							value={textValue}
@@ -126,7 +126,7 @@ export default function Write(): JSX.Element {
 							onChange={setTextValue}
 							placeholder="Write or paste your text here..."
 							className={`
-								absolute inset-0 w-full h-full p-8 border-4 dark:bg-default-100 dark:border-llm-chinois
+								relative md:absolute md:inset-0 w-full h-full p-8 border-4 dark:bg-default-100 dark:border-llm-chinois
 								bg-llm-blue-flower/10 border-llm-masala rounded-xl text resize-none outline-none text-sm
 								placeholder:opacity-60 font-sans whitespace-pre-wrap wrap-break-word focus:outline-none
 								dark:text-llm-lace text-llm-masala
@@ -144,7 +144,7 @@ export default function Write(): JSX.Element {
 						/>
 					</div>
 					
-					<ChatBox ref={chatRef} className="w-[30%]" endpoint="/api/explainations"/>
+					<ChatBox ref={chatRef} className="w-full md:w-[30%]" endpoint="/api/explainations"/>
 				</div>
 
 				{/* Action buttons at the bottom */}
