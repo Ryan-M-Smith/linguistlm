@@ -1,14 +1,6 @@
 import { JSX } from "react";
 import { Divider } from "@heroui/divider";
 
-/**
- * Home page (combined)
- *
- * The sections previously separated into small components have been combined
- * into this single `Home` component at your request to reduce fragmentation.
- * The markup, classNames and content are preserved.
- */
-
 export default function Home(): JSX.Element {
     return (
         <div className="overflow-x-hidden relative">
@@ -31,7 +23,7 @@ export default function Home(): JSX.Element {
 
                         <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                             <a href="#" className="bg-llm-chinois text-primary-foreground px-8 py-4 rounded-full font-semibold text-lg hover:shadow-xl hover:-translate-y-1 transition-all">Start Learning Free</a>
-                            <a href="#how-it-works" className="bg-default-100 text-foreground px-8 py-4 rounded-full font-semibold text-lg border-2 border-default-200 hover:bg-default-200 transition-all">Explore Features</a>
+                            <a href="#how-it-works" className="bg-default-100 text-foreground px-8 py-4 rounded-full font-semibold text-lg border-2 border-default-200 hover:shadow-xl hover:-translate-y-1 transition-all">Explore Features</a>
                         </div>
                     </div>
 
@@ -77,19 +69,19 @@ export default function Home(): JSX.Element {
                     </div>
 
                     <div className="grid md:grid-cols-3 gap-8 mb-16">
-                        <div className="bg-llm-sea-glass/40 p-8 rounded-3xl border-2 border-default-200 hover:border-primary hover:shadow-xl hover:-translate-y-2 transition-all">
+                        <div className="bg-llm-sea-glass/40 p-8 rounded-3xl border-2 border-default-200 hover:border-llm-sea-glass hover:shadow-xl hover:-translate-y-2 transition-all">
                             <div className="w-16 h-16 bg-llm-blue-flower/60 rounded-2xl flex items-center justify-center text-3xl mb-6">📖</div>
                             <h3 className="text-2xl font-bold mb-4 text-foreground">Reading Practice</h3>
                             <p className="text-default-700 leading-relaxed">Build comprehension with curated texts, real-world articles, and instant translations. Progress from beginner to advanced materials at your pace.</p>
                         </div>
 
-                        <div className="bg-llm-sea-glass/40 p-8 rounded-3xl border-2 border-default-200 hover:border-primary hover:shadow-xl hover:-translate-y-2 transition-all">
+                        <div className="bg-llm-sea-glass/40 p-8 rounded-3xl border-2 border-default-200 hover:border-llm-sea-glass hover:shadow-xl hover:-translate-y-2 transition-all">
                             <div className="w-16 h-16 bg-llm-blue-flower/60 rounded-2xl flex items-center justify-center text-3xl mb-6">✍️</div>
                             <h3 className="text-2xl font-bold mb-4 text-foreground">Writing Skills</h3>
                             <p className="text-default-700 leading-relaxed">Get instant feedback on grammar, vocabulary, and style. Practice everything from casual messages to formal essays with detailed corrections.</p>
                         </div>
 
-                        <div className="bg-llm-sea-glass/40 p-8 rounded-3xl border-2 border-default-200 hover:border-primary hover:shadow-xl hover:-translate-y-2 transition-all">
+                        <div className="bg-llm-sea-glass/40 p-8 rounded-3xl border-2 border-default-200 hover:border-llm-sea-glass hover:shadow-xl hover:-translate-y-2 transition-all">
                             <div className="w-16 h-16 bg-llm-blue-flower/60 rounded-2xl flex items-center justify-center text-3xl mb-6">💬</div>
                             <h3 className="text-2xl font-bold mb-4 text-foreground">Speaking Fluency</h3>
                             <p className="text-default-700 leading-relaxed">Have real conversations with AI that responds naturally. Practice pronunciation, build confidence, and develop conversational fluency through daily dialogue.</p>
