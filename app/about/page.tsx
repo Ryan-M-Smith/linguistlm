@@ -14,6 +14,24 @@ export default function About(): JSX.Element {
 		ref.current.scrollBy({ left: distance, behavior: "smooth" });
 	};
 
+	// scroll helpers that clamp to bounds so prev/next reach the true start/end
+	const scrollPrev = (ref = carouselRef) => {
+		if (!ref?.current) return;
+		const el = ref.current;
+		const delta = Math.floor(el.clientWidth * 0.7);
+		const target = el.scrollLeft <= delta ? 0 : el.scrollLeft - delta;
+		el.scrollTo({ left: Math.max(0, target), behavior: "smooth" });
+	};
+
+	const scrollNext = (ref = carouselRef) => {
+		if (!ref?.current) return;
+		const el = ref.current;
+		const delta = Math.floor(el.clientWidth * 0.7);
+		const maxLeft = el.scrollWidth - el.clientWidth;
+		const target = el.scrollLeft + delta >= maxLeft ? maxLeft : el.scrollLeft + delta;
+		el.scrollTo({ left: Math.min(maxLeft, target), behavior: "smooth" });
+	};
+
 	return (
 		<div className="flex flex-col items-center w-full min-h-full bg-llm-lace dark:bg-default-50">
 			<div className="max-w-5xl w-full px-6 py-12 space-y-16">
@@ -37,7 +55,7 @@ export default function About(): JSX.Element {
 							type="button"
 							aria-label="Previous"
 							className="hidden md:flex items-center justify-center absolute left-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-default-100 shadow-md hover:bg-default-200"
-							onClick={() => scrollBy(-(carouselRef.current?.clientWidth ?? 320) * 0.7)}
+							onClick={() => scrollPrev(carouselRef)}
 						>
 							‹
 						</button>
@@ -45,15 +63,16 @@ export default function About(): JSX.Element {
 						{/* Carousel */}
 						<div
 							ref={carouselRef}
-							className="flex gap-8 overflow-x-auto py-4 px-6 scroll-smooth snap-x snap-mandatory"
+							className="flex gap-8 overflow-x-auto py-4 px-14 scroll-smooth snap-x snap-mandatory"
+							style={{ scrollPaddingInline: '3.5rem' }}
 						>
 							{/* each card: min-width prevents wrapping and makes a single-row carousel */}
 							{[
-								{ src: "/smith_ryan_m.jpg", name: "Ryan Smith", role: "Role" },
+								{ src: "/smith_ryan_m.jpg", name: "Ryan Smith", role: "10x Dev" },
 								{ src: "/ramsey_simon_a.jpg", name: "Simon Ramsey", role: "0.1x Dev" },
 								{ src: "/lunsford_shania_l.jpg", name: "Shania Lunsford", role: "1x Dev" },
 								{ src: "/pokharel_spriha_.jpg", name: "Spriha Pokharel", role: "1x Dev" },
-								{ src: "/kommi_adithya_.jpg", name: "Adithya Kommi", role: "1x Dev" },
+								{ src: "/kommi_adithya_.jpg", name: "Adithya Kommi", role: "Dev?" },
 							].map((m) => (
 								<div
 									key={m.name}
@@ -74,7 +93,7 @@ export default function About(): JSX.Element {
 							type="button"
 							aria-label="Next"
 							className="hidden md:flex items-center justify-center absolute right-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-default-100 shadow-md hover:bg-default-200"
-							onClick={() => scrollBy((carouselRef.current?.clientWidth ?? 320) * 0.7)}
+							onClick={() => scrollNext(carouselRef)}
 						>
 							›
 						</button>
@@ -97,14 +116,15 @@ export default function About(): JSX.Element {
 							type="button"
 							aria-label="Prev tech"
 							className="hidden md:flex items-center justify-center absolute left-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-default-100 shadow-md hover:bg-default-200"
-							onClick={() => scrollBy(-(techRef.current?.clientWidth ?? 320) * 0.7, techRef)}
+							onClick={() => scrollPrev(techRef)}
 						>
 							‹
 						</button>
 
 						<div
 							ref={techRef}
-							className="flex gap-6 overflow-x-auto py-4 px-6 scroll-smooth snap-x snap-mandatory"
+							className="flex gap-6 overflow-x-auto py-4 px-14 scroll-smooth snap-x snap-mandatory"
+							style={{ scrollPaddingInline: '3.5rem' }}
 						>
 							{[
 								{ icon: <RiReactjsFill size={36} />, label: "React" },
@@ -125,7 +145,7 @@ export default function About(): JSX.Element {
 							type="button"
 							aria-label="Next tech"
 							className="hidden md:flex items-center justify-center absolute right-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-default-100 shadow-md hover:bg-default-200"
-							onClick={() => scrollBy((techRef.current?.clientWidth ?? 320) * 0.7, techRef)}
+							onClick={() => scrollNext(techRef)}
 						>
 							›
 						</button>
