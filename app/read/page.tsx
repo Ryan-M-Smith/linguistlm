@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@heroui/button";
+import { Spinner } from "@heroui/spinner";
 import { FaArrowUp } from "react-icons/fa6";
 import { HiOutlineUpload } from "react-icons/hi";
 import { JSX, useRef, useState } from "react";
@@ -12,6 +13,7 @@ export default function Read(): JSX.Element {
     const textareaRef = useRef<HTMLTextAreaElement>(null);
     const fileNameRef = useRef<HTMLDivElement>(null);
     const [textValue, setTextValue] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
 
 	const SendButton = () => (
 		<Button
@@ -28,22 +30,37 @@ export default function Read(): JSX.Element {
 		/>
 	);
 
-    const handleDrop = (file: File) => {
-        const reader = new FileReader();
+    const handleDrop = async (file: File) => {
+        try {
+            setIsLoading(true);
+            if (fileNameRef.current) fileNameRef.current.textContent = `Loading ${file.name}...`;
 
-        reader.onload = () => {
-            if (textareaRef.current) {
-                textareaRef.current.value = String(reader.result ?? "");
-                textareaRef.current.dispatchEvent(new Event("input", { bubbles: true }));
+            // Create form data and send to API
+            const formData = new FormData();
+            formData.append('file', file);
+
+            const response = await fetch('/api/read-file', {
+                method: 'POST',
+                body: formData,
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}`);
             }
-            if (fileNameRef.current) fileNameRef.current.textContent = file.name;
-        };
 
-        reader.onerror = () => {
-            console.error("File read error", reader.error);
-        };
-		
-        reader.readAsText(file);
+            const data = await response.json();
+            const extractedText = data.text || "";
+
+            setTextValue(extractedText);
+            if (fileNameRef.current) fileNameRef.current.textContent = file.name;
+        } catch (error) {
+            console.error("Error reading file:", error);
+            if (fileNameRef.current) {
+                fileNameRef.current.textContent = "Error reading file";
+            }
+        } finally {
+            setIsLoading(false);
+        }
     };
 
 
@@ -69,6 +86,8 @@ export default function Read(): JSX.Element {
 							}
 
                             handleDrop(file);
+                            // Reset input so the same file can be selected again
+                            e.target.value = '';
                         }}
                     />
                     <div
@@ -94,21 +113,28 @@ export default function Read(): JSX.Element {
                                     fileNameRef.current.textContent = "";
                                 }
                             }}
+                            disabled={isLoading}
                         />
 
-                        <Button
-							className={`
-								absolute justify-start right-4 bottom-4 bg-default-50 text-white
-								rounded-full p-2 shadow-lg hover:bg-llm-sea-glass focus:outline-none
-								focus:ring-2 focus:ring-llm-sea-glass z-10 border-2 dark:border-llm-chinois border-llm-masala
-							`}
-							startContent={<HiOutlineUpload size={24}/>}
-							onPress={() => {
-								const el = document.getElementById("file-picker") as HTMLInputElement | null;
-								el?.click();
-							}}
-							isIconOnly
-						/>
+                        {isLoading ? (
+                            <div className="absolute right-4 bottom-4 z-10">
+                                <Spinner size="lg" color="primary" />
+                            </div>
+                        ) : (
+                            <Button
+                                className={`
+                                    absolute justify-start right-4 bottom-4 bg-default-50 text-white
+                                    rounded-full p-2 shadow-lg hover:bg-llm-sea-glass focus:outline-none
+                                    focus:ring-2 focus:ring-llm-sea-glass z-10 border-2 dark:border-llm-chinois border-llm-masala
+                                `}
+                                startContent={<HiOutlineUpload size={24}/>}
+                                onPress={() => {
+                                    const el = document.getElementById("file-picker") as HTMLInputElement | null;
+                                    el?.click();
+                                }}
+                                isIconOnly
+                            />
+                        )}
 
                         <div
                             ref={fileNameRef}
