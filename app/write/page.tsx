@@ -195,7 +195,7 @@ export default function Write(): JSX.Element {
 						errors={errors}
 						ignoredKeys={ignoredKeys}
 						onChange={setTextValue}
-						placeholder="Write or paste your text here…"
+						placeholder="Write or paste your text here..."
 						className={`
 							absolute inset-0 w-full h-full p-8 border-4 dark:bg-default-100 dark:border-llm-chinois
 							bg-llm-blue-flower/10 border-llm-masala rounded-xl text resize-none outline-none text-sm
