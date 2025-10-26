@@ -6,14 +6,17 @@ import { FaArrowUp } from "react-icons/fa6";
 import { HiOutlineUpload } from "react-icons/hi";
 import { JSX, useRef, useState } from "react";
 
-import ChatBox from "@/components/chatbox";
+import ChatBox, { ChatBoxHandle } from "@/components/chatbox";
 import { Drop } from "@/components/drop";
+import { SelectableText } from "@/components/selectable-text";
 
 export default function Read(): JSX.Element {
     const textareaRef = useRef<HTMLTextAreaElement>(null);
     const fileNameRef = useRef<HTMLDivElement>(null);
+    const chatRef = useRef<ChatBoxHandle | null>(null);
     const [textValue, setTextValue] = useState("");
     const [isLoading, setIsLoading] = useState(false);
+    const [detectedLanguage, setDetectedLanguage] = useState<string>("");
 
 	const SendButton = () => (
 		<Button
@@ -50,16 +53,35 @@ export default function Read(): JSX.Element {
 
             const data = await response.json();
             const extractedText = data.text || "";
+            const language = data.language || "Unknown";
 
             setTextValue(extractedText);
+            setDetectedLanguage(language);
             if (fileNameRef.current) fileNameRef.current.textContent = file.name;
         } catch (error) {
             console.error("Error reading file:", error);
             if (fileNameRef.current) {
                 fileNameRef.current.textContent = "Error reading file";
             }
+            setDetectedLanguage("");
         } finally {
             setIsLoading(false);
+        }
+    };
+
+    const handleExplain = async (selectedText: string) => {
+        const langContext = detectedLanguage && detectedLanguage !== "Unknown" 
+            ? ` (in ${detectedLanguage})` 
+            : "";
+        const prompt = `Explain the following text${langContext}. Provide context, meaning, and any relevant cultural or linguistic information:\n\n"${selectedText}"`;
+        await chatRef.current?.send(prompt);
+    };
+
+    const handleTextChange = (newText: string) => {
+        setTextValue(newText);
+        if (newText === "" && fileNameRef.current) {
+            fileNameRef.current.textContent = "";
+            setDetectedLanguage("");
         }
     };
 
@@ -97,23 +119,21 @@ export default function Read(): JSX.Element {
                             outline-none text relative
                         `}
                     >
-                        <textarea
-                            ref={textareaRef}
-                            id="main-textarea"
-                            className={`
-                                w-full h-full p-4 bg-transparent resize-none outline-none
-                                text-sm placeholder:opacity-60
-                            `}
-                            placeholder="Paste your text, drop a file here, or click to upload..."
-                            style={{ fontSize: "1rem" }}
+                        <SelectableText
                             value={textValue}
-                            onChange={e => {
-                                setTextValue(e.target.value);
-                                if (e.target.value === "" && fileNameRef.current) {
-                                    fileNameRef.current.textContent = "";
-                                }
-                            }}
+                            onChange={handleTextChange}
+                            onExplain={handleExplain}
                             disabled={isLoading}
+                            placeholder="Paste your text or drop a file here..."
+                            className={`
+                                w-full h-full p-4 bg-transparent outline-none
+                                text-sm overflow-auto whitespace-pre-wrap
+                            `}
+                            style={{
+                                fontSize: "1rem",
+                                fontFamily: "inherit",
+                                lineHeight: 1.5,
+                            }}
                         />
 
                         {isLoading ? (
@@ -136,14 +156,20 @@ export default function Read(): JSX.Element {
                             />
                         )}
 
-                        <div
-                            ref={fileNameRef}
-                            id="dropped-file-name"
-                            className="absolute left-6 bottom-4 text-xs opacity-75 select-none pointer-events-none"
-                        />
+                        <div className="absolute left-6 bottom-4 flex items-center gap-3 text-xs opacity-75 select-none pointer-events-none">
+                            <div ref={fileNameRef} id="dropped-file-name" />
+                            {detectedLanguage && detectedLanguage !== "Unknown" && (
+                                <div className="flex items-center gap-1">
+                                    <span>•</span>
+                                    <span className="font-semibold text-llm-sea-glass dark:text-llm-chinois">
+                                        {detectedLanguage}
+                                    </span>
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </Drop>
-                <ChatBox endpoint="/api/explainations"/>
+                <ChatBox ref={chatRef} endpoint="/api/reader"/>
             </div>
         </div>
     );

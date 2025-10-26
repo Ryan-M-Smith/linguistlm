@@ -24,8 +24,8 @@ export async function POST(req: NextRequest) {
 		// Determine MIME type
 		const mimeType = file.type || 'application/octet-stream';
 
-		// Create a chat session with Gemini
-		const chat = ai.chats.create({ 
+		// Create a chat session with Gemini for text extraction
+		const extractChat = ai.chats.create({ 
 			model,
 			config: {
 				systemInstruction: [
@@ -36,8 +36,8 @@ export async function POST(req: NextRequest) {
 			}
 		});
 
-		// Send the file to Gemini
-		const response = await chat.sendMessage({
+		// Send the file to Gemini for text extraction
+		const extractResponse = await extractChat.sendMessage({
 			message: [
 				{
 					text: "Please extract all text content from this file:"
@@ -51,10 +51,34 @@ export async function POST(req: NextRequest) {
 			]
 		});
 
-		const extractedText = response.text || "";
+		const extractedText = extractResponse.text || "";
+
+		// Detect language if text was extracted
+		let detectedLanguage = "Unknown";
+		if (extractedText.trim()) {
+			const langChat = ai.chats.create({ 
+				model,
+				config: {
+					systemInstruction: [
+						{
+							text: `You are a language detection assistant. Analyze the provided text and identify the primary language. Respond with ONLY the language name in English (e.g., "English", "Spanish", "French", "Japanese", etc.). Do not include any other text or explanation.`
+						}
+					]
+				}
+			});
+
+			const langResponse = await langChat.sendMessage({
+				message: `Detect the language of this text: ${extractedText.slice(0, 1000)}`
+			});
+
+			detectedLanguage = langResponse.text?.trim() || "Unknown";
+		}
 
 		return new Response(
-			JSON.stringify({ text: extractedText }),
+			JSON.stringify({ 
+				text: extractedText,
+				language: detectedLanguage
+			}),
 			{
 				headers: {
 					"Content-Type": "application/json",
