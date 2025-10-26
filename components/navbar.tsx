@@ -30,36 +30,38 @@ export default function App() {
   return (
     <div className="bg-default-50 relative flex shrink-0 h-16 items-center pl-2 pr-4">
       <div className="flex items-center z-10 gap-2 justify-center">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 15 460 90" className="w-[200px] h-auto">
-          <defs>
-            <style>
-              {`
-                @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@700&display=swap');
-                
-                .logo-text {
-                  font-family: 'Rubik', sans-serif;
-                  font-weight: 700;
-                }
-              `}
-            </style>
-          </defs>
-          
-          {/* Main Logo Text */}
-          <text x="10" y="80" className="logo-text" fontSize="72">
-            <tspan className="fill-[#77C5C5]">L</tspan>
-            <tspan className="fill-default-400">INGUIST</tspan>
-          </text>
-          
-          {/* Chat Bubble with LM */}
-          <g transform="translate(360, 25)">
-            {/* Bubble shape */}
-            <rect className="fill-[#77C5C5]" x="0" y="0" width="90" height="60" rx="12"/>
-            {/* Chat tail */}
-            <path className="fill-[#77C5C5]" d="M 15 60 L 10 70 L 25 60 Z"/>
-            {/* LM text */}
-            <text x="45" y="33" className="logo-text fill-default-50" fontSize="32" textAnchor="middle" dominantBaseline="middle">LM</text>
-          </g>
-        </svg>
+        <Link href="/">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 15 460 90" className="w-[200px] h-auto">
+            <defs>
+              <style>
+                {`
+                  @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@700&display=swap');
+                  
+                  .logo-text {
+                    font-family: 'Rubik', sans-serif;
+                    font-weight: 700;
+                  }
+                `}
+              </style>
+            </defs>
+            
+            {/* Main Logo Text */}
+            <text x="10" y="80" className="logo-text" fontSize="72">
+              <tspan className="fill-[#77C5C5]">L</tspan>
+              <tspan className="fill-default-400">INGUIST</tspan>
+            </text>
+            
+            {/* Chat Bubble with LM */}
+            <g transform="translate(360, 25)">
+              {/* Bubble shape */}
+              <rect className="fill-[#77C5C5]" x="0" y="0" width="90" height="60" rx="12"/>
+              {/* Chat tail */}
+              <path className="fill-[#77C5C5]" d="M 15 60 L 10 70 L 25 60 Z"/>
+              {/* LM text */}
+              <text x="45" y="33" className="logo-text fill-default-50" fontSize="32" textAnchor="middle" dominantBaseline="middle">LM</text>
+            </g>
+          </svg>
+        </Link>
       </div>
 
       {/* Center the nav items: absolute center of the navbar */}
