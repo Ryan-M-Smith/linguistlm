@@ -8,9 +8,9 @@ import { Highlighter } from "@/components/highlighter";
 import { TooltipPortal } from "@/components/tooltip-portal";
 
 export default function Write(): JSX.Element {
-	const [textValue, setTextValue] = useState("");
-	const [errors, setErrors] = useState<GrammarError[]>([]);
-	const [ignoredKeys, setIgnoredKeys] = useState<Set<string>>(new Set());
+    const [textValue, setTextValue] = useState("");
+    const [errors, setErrors] = useState<GrammarError[]>([]);
+    const [ignoredKeys, setIgnoredKeys] = useState<Set<string>>(new Set());
     const chatRef = useRef<ChatBoxHandle | null>(null);
 	const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 	const abortRef = useRef<AbortController | null>(null);
@@ -197,7 +197,7 @@ export default function Write(): JSX.Element {
 						onChange={setTextValue}
 						placeholder="Write or paste your text here…"
 						className={`
-							absolute inset-0 w-full h-full p-8 border-1 dark:bg-default-50 dark:border-llm-sea-glass
+							absolute inset-0 w-full h-full p-8 border-4 dark:bg-default-100 dark:border-llm-chinois
 							bg-llm-blue-flower/10 border-llm-masala rounded-xl text resize-none outline-none text-sm
 							placeholder:opacity-60 font-sans whitespace-pre-wrap wrap-break-word focus:outline-none
 						`}
