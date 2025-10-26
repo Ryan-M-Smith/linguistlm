@@ -145,6 +145,8 @@ export default function Read(): JSX.Element {
                                 fontSize: "1rem",
                                 fontFamily: "inherit",
                                 lineHeight: 1.5,
+                                direction: "ltr",
+                                unicodeBidi: "plaintext",
                             }}
                         />
 

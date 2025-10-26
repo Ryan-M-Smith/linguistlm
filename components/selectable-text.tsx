@@ -26,6 +26,15 @@ export function SelectableText({
 	const tooltipRef = useRef<HTMLDivElement>(null);
 	const [selectedText, setSelectedText] = useState("");
 	const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0, visible: false });
+	const isUserTypingRef = useRef(false);
+
+	// Update content only when value changes externally (not from user input)
+	useEffect(() => {
+		if (ref.current && !isUserTypingRef.current) {
+			ref.current.innerText = value;
+		}
+		isUserTypingRef.current = false;
+	}, [value]);
 
 	// Ensure placeholder CSS is present once
 	useEffect(() => {
@@ -108,12 +117,11 @@ export function SelectableText({
 				suppressContentEditableWarning
 				data-placeholder={placeholder || undefined}
 				onInput={(e) => {
+					isUserTypingRef.current = true;
 					const text = (e.target as HTMLDivElement).innerText;
 					onChange(text);
 				}}
-			>
-				{value}
-			</div>
+			/>
 
 			{/* Selection Tooltip */}
 			{tooltipPosition.visible && !disabled && (
