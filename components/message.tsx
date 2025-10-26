@@ -19,13 +19,6 @@ export default function Message({ className, children, role, isLoading, isFirst 
 	const User = ({ children }: { children: ReactNode }) => {
 		return (
 			<div className={`${className} flex flex-col w-full justify-end px-2 sm:px-4 mt-4 mb-1`} data-role="user">
-				{/* Horizontal divider bar - hidden for the first message
-				{ !isFirst && (
-					<div className="block w-full my-6">
-						<hr className="border-1 h-px border-default-400"/>
-					</div>
-				)} */}
-				
 				{/* User message */}
 				<div className="flex justify-end w-full">
 					<div className={`flex flex-col items-end relative max-w-[85%] sm:max-w-[75%]`}>

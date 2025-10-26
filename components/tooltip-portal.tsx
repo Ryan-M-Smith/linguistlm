@@ -10,7 +10,7 @@ export function TooltipPortal({
 	onDismiss,
 	onExplain,
 }: {
-	onAccept: (d: { start: number; end: number; suggestion: string; error?: string }) => void;
+	onAccept: (d: { start: number; end: number; suggestion: string; error?: string; span?: string }) => void;
 	onDismiss: (d: { start: number; end: number; error: string }) => void;
 	onExplain: (d: { start?: number; end?: number; error: string; span?: string }) => void;
 }) {
@@ -75,7 +75,7 @@ export function TooltipPortal({
 			controls.append(dismissBtn, explainBtn, acceptBtn);
 			dismissBtn.onclick = (ev) => { ev.preventDefault(); ev.stopPropagation(); const start = parseInt(target.getAttribute('data-start') || '0', 10); const end = parseInt(target.getAttribute('data-end') || '0', 10); onDismiss({ start, end, error }); hideNow(); };
 			explainBtn.onclick = (ev) => { ev.preventDefault(); ev.stopPropagation(); const start = parseInt(target.getAttribute('data-start') || '0', 10); const end = parseInt(target.getAttribute('data-end') || '0', 10); const span = target.innerText || ''; onExplain({ start, end, error, span }); };
-			acceptBtn.onclick = (ev) => { ev.preventDefault(); ev.stopPropagation(); const start = parseInt(target.getAttribute('data-start') || '0', 10); const end = parseInt(target.getAttribute('data-end') || '0', 10); onAccept({ start, end, suggestion, error }); hideNow(); };
+			acceptBtn.onclick = (ev) => { ev.preventDefault(); ev.stopPropagation(); const start = parseInt(target.getAttribute('data-start') || '0', 10); const end = parseInt(target.getAttribute('data-end') || '0', 10); const span = target.innerText || ''; onAccept({ start, end, suggestion, error, span }); hideNow(); };
 			tooltip.append(errorBubble, suggestionBubble, controls);
 			return true;
 		};

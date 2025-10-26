@@ -17,20 +17,22 @@ export function getHighlightedHtml(text: string, errors: GrammarError[], ignored
 	const clamp = (n: number, min: number, max: number) => Math.max(min, Math.min(max, n));
 
 	for (const err of visible) {
-		const s = clamp(err.start, 0, text.length);
-		const e = clamp(err.end, 0, text.length);
-		if (e <= lastIdx) continue; // overlapping or out-of-order safety
-		const start = Math.max(lastIdx, s);
+		const rawS = clamp(err.start, 0, text.length);
+		const rawE = clamp(err.end, 0, text.length);
+		if (rawE <= lastIdx) continue; // overlapping or out-of-order safety
+		const start = Math.max(lastIdx, rawS);
+		const end = Math.max(start, rawE);
 		// Add plain text before the highlight
 		result += escapeHtml(text.slice(lastIdx, start));
 		// Build the highlight span
 		const errorMsg = escapeHtml(err.error).replace(/\"/g, '&quot;');
 		const suggestionMsg = escapeHtml(err.suggestion).replace(/\"/g, '&quot;');
+		const spanText = escapeHtml(text.slice(start, end));
 		result +=
-			`<span class=\"highlight-tooltip\" data-start=\"${s}\" data-end=\"${e}\" data-error=\"${errorMsg}\" data-suggestion=\"${suggestionMsg}\" style=\"background:#fbbf24;color:#000;padding:0 2px;border-radius:3px;position:relative;text-decoration:underline;text-decoration-style:wavy;text-decoration-color:#d97706;text-underline-offset:2px;\">` +
-			escapeHtml(text.slice(s, e)) +
+			`<span class=\"highlight-tooltip\" data-start=\"${start}\" data-end=\"${end}\" data-error=\"${errorMsg}\" data-suggestion=\"${suggestionMsg}\" style=\"background:#fbbf24;color:#000;padding:0 2px;border-radius:3px;position:relative;text-decoration:underline;text-decoration-style:wavy;text-decoration-color:#d97706;text-underline-offset:2px;\">` +
+			spanText +
 			"</span>";
-		lastIdx = e;
+		lastIdx = end;
 	}
 	// Remainder after last highlight
 	result += escapeHtml(text.slice(lastIdx));
