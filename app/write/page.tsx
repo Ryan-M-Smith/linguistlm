@@ -200,12 +200,10 @@ export default function Write(): JSX.Element {
 							absolute inset-0 w-full h-full p-8 border-4 dark:bg-default-100 dark:border-llm-chinois
 							bg-llm-blue-flower/10 border-llm-masala rounded-xl text resize-none outline-none text-sm
 							placeholder:opacity-60 font-sans whitespace-pre-wrap wrap-break-word focus:outline-none
+							dark:text-llm-lace text-llm-masala
 						`}
 						style={{
 							fontSize: "1rem",
-							color: typeof window !== "undefined" && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
-								? "#302c2a"
-								: "#f3f3e7",
 							fontFamily: "inherit",
 							lineHeight: 1.5,
 							letterSpacing: "normal",
