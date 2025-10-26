@@ -4,8 +4,9 @@ import { Button } from "@heroui/button";
 import { FaArrowUp } from "react-icons/fa6";
 import { HiOutlineUpload } from "react-icons/hi";
 import { JSX, useRef, useState } from "react";
-import { Drop } from "@/components/drop";
 import { Textarea } from "@heroui/input";
+
+import { Drop } from "@/components/drop";
 
 export default function Read(): JSX.Element {
     const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -29,6 +30,7 @@ export default function Read(): JSX.Element {
 
     const handleDrop = (file: File) => {
         const reader = new FileReader();
+
         reader.onload = () => {
             if (textareaRef.current) {
                 textareaRef.current.value = String(reader.result ?? "");
@@ -36,9 +38,11 @@ export default function Read(): JSX.Element {
             }
             if (fileNameRef.current) fileNameRef.current.textContent = file.name;
         };
+
         reader.onerror = () => {
             console.error("File read error", reader.error);
         };
+		
         reader.readAsText(file);
     };
 
@@ -59,6 +63,7 @@ export default function Read(): JSX.Element {
                         className="hidden"
                         onChange={ (e) => {
                             const file = (e.target as HTMLInputElement).files?.[0];
+
                             if (!file) {
 								return;
 							}
