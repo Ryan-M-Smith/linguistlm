@@ -28,9 +28,9 @@ export default function Write(): JSX.Element {
 			<div className="flex gap-x-4 w-[90%] p-4">
 				<textarea
 					className={`
-						flex-1 h-full p-4 border-1 dark:bg-default-50 dark:border-llm-sea-glass
-						bg-llm-blue-flower/10 border-llm-masala resize-none rounded-xl
-						outline-none text
+						flex-1 h-full p-8 border-1 dark:bg-default-50 dark:border-llm-sea-glass
+						bg-llm-blue-flower/10 border-llm-masala rounded-xl text resize-none
+						outline-none text-sm placeholder:opacity-60
 					`}
 					placeholder="Enter or paste your text..."
 					style={{ fontSize: "1rem" }}
