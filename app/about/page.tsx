@@ -72,7 +72,7 @@ export default function About(): JSX.Element {
 								{ src: "/ramsey_simon_a.jpg", name: "Simon Ramsey", role: "0.1x Dev" },
 								{ src: "/lunsford_shania_l.jpg", name: "Shania Lunsford", role: "1x Dev" },
 								{ src: "/pokharel_spriha_.jpg", name: "Spriha Pokharel", role: "1x Dev" },
-								{ src: "/kommi_adithya_.jpg", name: "Adithya Kommi", role: "Dev?" },
+								{ src: "/kommi_adithya_.jpg", name: "Adithya Kommi", role: "Is he a dev?" },
 							].map((m) => (
 								<div
 									key={m.name}
