@@ -44,12 +44,14 @@ export default function Message({ className, children, role, isLoading, isFirst 
 			<div className="flex w-full justify-center px-2 sm:px-4 my-4" data-role="model">
 				<div className="text-left text-base sm:text-lg text-zinc-100 whitespace-pre-line">
 					{isLoading ? (
-						<Spinner
-							className="flex justify-start items-center"
-							label="Waiting on LinguistLM"
-							color="primary"
-							variant="gradient"
-						/>
+						<div className="flex items-center gap-2">
+							<span>Waiting on LinguistLM</span>
+							<Spinner
+								className="flex items-center"
+								variant="dots"
+								color="default"
+							/>
+						</div>
 					) : children}
 				</div>
 			</div>
