@@ -68,11 +68,11 @@ export default function About(): JSX.Element {
 						>
 							{/* each card: min-width prevents wrapping and makes a single-row carousel */}
 							{[
-								{ src: "/smith_ryan_m.jpg", name: "Ryan Smith", role: "10x Dev" },
-								{ src: "/ramsey_simon_a.jpg", name: "Simon Ramsey", role: "0.1x Dev" },
-								{ src: "/lunsford_shania_l.jpg", name: "Shania Lunsford", role: "1x Dev" },
-								{ src: "/pokharel_spriha_.jpg", name: "Spriha Pokharel", role: "1x Dev" },
-								{ src: "/kommi_adithya_.jpg", name: "Adithya Kommi", role: "Is he a dev?" },
+								{ src: "/smith_ryan_m.jpg", name: "Ryan Smith", role: "10x Dev", description: "We think he's a wizard" },
+								{ src: "/ramsey_simon_a.jpg", name: "Simon Ramsey", role: "5x Dev", description: "Zoned out probably" },
+								{ src: "/lunsford_shania_l.jpg", name: "Shania Lunsford", role: "1x Dev", description: "She means business" },
+								{ src: "/pokharel_spriha_.jpg", name: "Spriha Pokharel", role: "1x Dev", description: "Fearless leader" },
+								{ src: "/kommi_adithya_.jpg", name: "Adithya Kommi", role: "Is he a dev?", description: "Big vibes guy" },
 							].map((m) => (
 								<div
 									key={m.name}
@@ -83,7 +83,7 @@ export default function About(): JSX.Element {
 									</div>
 									<h3 className="text-lg font-semibold text-foreground mb-1">{m.name}</h3>
 									<p className="text-sm text-llm-chinois mb-2">{m.role}</p>
-									<p className="text-xs text-default-600">Brief bio or description</p>
+									<p className="text-xs text-default-600">{m.description}</p>
 								</div>
 							))}
 						</div>
