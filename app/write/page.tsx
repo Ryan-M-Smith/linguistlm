@@ -66,17 +66,31 @@ export default function Write(): JSX.Element {
 		<TooltipPortal onAccept={handleAccept} onDismiss={handleDismiss} onExplain={handleExplain} />
 		<div className="flex justify-center w-full h-full overflow-hidden">
 			<div className="flex gap-x-4 w-[90%] p-4">
-				<textarea
-					className={`
-						flex-1 h-full p-8 border-1 dark:bg-default-50 dark:border-llm-sea-glass
-						bg-llm-blue-flower/10 border-llm-masala rounded-xl text resize-none
-						outline-none text-sm placeholder:opacity-60
-					`}
-					placeholder="Enter or paste your text..."
-					style={{ fontSize: "1rem" }}
-					value={textValue}
-					onChange={e => setTextValue(e.target.value)}
-				/>
+				<div className="flex-1 min-w-0 h-full relative">
+					<Highlighter
+						value={textValue}
+						errors={errors}
+						ignoredKeys={ignoredKeys}
+						onChange={setTextValue}
+						placeholder="Write or paste your text here…"
+						className={`
+							absolute inset-0 w-full h-full p-8 border-1 dark:bg-default-50 dark:border-llm-sea-glass
+							bg-llm-blue-flower/10 border-llm-masala rounded-xl text resize-none outline-none text-sm
+							placeholder:opacity-60 font-sans whitespace-pre-wrap wrap-break-word focus:outline-none
+						`}
+						style={{
+							fontSize: "1rem",
+							color: "#f3f3e7",
+							fontFamily: "inherit",
+							lineHeight: 1.5,
+							letterSpacing: "normal",
+							zIndex: 2,
+							minHeight: "100%",
+							maxHeight: "100%",
+							overflow: "auto",
+						}}
+					/>
+				</div>
 				<ChatBox/>
 			</div>
 		</div>
