@@ -1,6 +1,7 @@
 "use client";
 
-import { JSX, useEffect, useId, useRef, useState } from "react";
+import { JSX, forwardRef, useEffect, useId, useImperativeHandle, useRef, useState } from "react";
+import type { ForwardedRef } from "react";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import InputBox from "./input-box";
@@ -9,12 +10,16 @@ import Message from "@/components/message";
 type Role = "user" | "model";
 type ChatMessage = { id: string; role: Role; text: string; isLoading?: boolean };
 
+export type ChatBoxHandle = {
+	send: (prompt: string) => Promise<void>;
+};
+
 interface ChatBoxProps {
 	className?: string;
 	endpoint?: string;
 }
 
-export default function ChatBox({ className, endpoint = "/api/explainations" }: ChatBoxProps): JSX.Element {
+function ChatBoxImpl({ className, endpoint = "/api/explainations" }: ChatBoxProps, ref: ForwardedRef<ChatBoxHandle>): JSX.Element {
 	const [messages, setMessages] = useState<ChatMessage[]>([]);
 	// useId yields a value that's consistent between server and client, avoiding hydration mismatches
 	const listId = useId();
@@ -85,6 +90,9 @@ export default function ChatBox({ className, endpoint = "/api/explainations" }: 
 		// No auto-bottom scroll; we keep the chat anchored to the top when messages change
 	};
 
+	// Expose the send method to parents (e.g., write page Explain action)
+	useImperativeHandle(ref, () => ({ send }), [send]);
+
 	return (
 		<div
 			className={`
@@ -126,3 +134,5 @@ export default function ChatBox({ className, endpoint = "/api/explainations" }: 
 		</div>
 	)
 }
+
+export default forwardRef(ChatBoxImpl);

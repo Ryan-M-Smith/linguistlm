@@ -1,15 +1,17 @@
 "use client";
 
-import { JSX, useEffect, useState } from "react";
+import { JSX, useEffect, useRef, useState } from "react";
+
+import ChatBox, { ChatBoxHandle } from "@/components/chatbox";
+import type { GrammarError } from "@/lib/highlight";
 import { Highlighter } from "@/components/highlighter";
 import { TooltipPortal } from "@/components/tooltip-portal";
-import type { GrammarError } from "@/lib/highlight";
-import ChatBox from "@/components/chatbox";
 
 export default function Write(): JSX.Element {
 	const [textValue, setTextValue] = useState("");
 	const [errors, setErrors] = useState<GrammarError[]>([]);
 	const [ignoredKeys, setIgnoredKeys] = useState<Set<string>>(new Set());
+    const chatRef = useRef<ChatBoxHandle | null>(null);
 
 	useEffect(() => {
 		if (textValue === "") {
@@ -48,16 +50,9 @@ export default function Write(): JSX.Element {
 	};
 
 	const handleExplain = async (d: { start?: number; end?: number; error: string; span?: string }) => {
-		// const snippet = d.span || (typeof d.start === 'number' && typeof d.end === 'number' ? textValue.slice(d.start, d.end) : "");
-		// const prompt = `Explain the following grammar issue clearly and concisely with the rule and 1-2 short examples.\n\nSelected text: "${snippet}"\nReported issue: ${d.error}`;
-		// setChatValue("Loading explanation…");
-		// try {
-		// 	const res = await fetch('/api/explainations', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ query: prompt }) });
-		// 	const text = await res.text();
-		// 	setChatValue(text);
-		// } catch (err: any) {
-		// 	setChatValue(`Error fetching explanation: ${err?.message || String(err)}`);
-		// }
+		const snippet = d.span || (typeof d.start === 'number' && typeof d.end === 'number' ? textValue.slice(d.start, d.end) : "");
+		const prompt = `Explain the following grammar issue clearly and concisely with the rule and 1-2 short examples.\n\nSelected text: "${snippet}"\nReported issue: ${d.error}`;
+		await chatRef.current?.send(prompt);
 	};
 
 	return (
@@ -93,7 +88,8 @@ export default function Write(): JSX.Element {
 						}}
 					/>
 				</div>
-				<ChatBox endpoint="/api/explainations"/>
+
+				<ChatBox ref={chatRef} endpoint="/api/explainations"/>
 			</div>
 		</div>
 		</>
