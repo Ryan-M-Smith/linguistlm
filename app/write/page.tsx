@@ -1,19 +1,28 @@
+"use client";
+
 import { Button } from "@heroui/button";
-import { FaCircleArrowUp } from "react-icons/fa6";
-import { JSX } from "react";
+import { FaArrowUp } from "react-icons/fa6";
+import { JSX, useState } from "react";
 import { Textarea } from "@heroui/input";
 
 export default function Write(): JSX.Element {
+	const [textValue, setTextValue] = useState("");
+
 	const SendButton = () => (
 		<Button
-			className="absolute bottom-0 right-0"
-			variant="ghost"
+			className={`
+				absolute right-3 bottom-3 bg-llm-masala text-white
+				rounded-full shadow-sm hover:bg-llm-sea-glass
+				focus:outline-none focus:ring-2 focus:ring-llm-sea-glass z-10
+				border-2 dark:border-llm-sea-glass border-llm-masala
+			`}
 			radius="full"
-			startContent={<FaCircleArrowUp size={30}/>}
+			variant="bordered"
+			startContent={<FaArrowUp size={16} />}
 			isIconOnly
 		/>
 	);
-	
+
 	return (
 		<div className="flex justify-center w-full h-full overflow-hidden">
 			<div className="flex gap-x-4 w-[90%] p-4">
@@ -25,8 +34,9 @@ export default function Write(): JSX.Element {
 					`}
 					placeholder="Enter or paste your text..."
 					style={{ fontSize: "1rem" }}
+					value={textValue}
+					onChange={e => setTextValue(e.target.value)}
 				/>
-
 				<div
 					className={`
 						border-1 dark:bg-default-50 dark:border-llm-sea-glass bg-llm-blue-flower/10
@@ -43,15 +53,7 @@ export default function Write(): JSX.Element {
 										   hover:dark:bg-llm-masala transition-none`
 						}}
 						radius="lg"
-						endContent={
-							<Button
-								className="transition-none hover:bg-transparent hover:opacity-100"
-								variant="ghost"
-								radius="full"
-								startContent={<FaCircleArrowUp size={30} />}
-								isIconOnly
-							/>
-						}
+						endContent={<SendButton />}
 						maxRows={4}
 					/>
 				</div>
