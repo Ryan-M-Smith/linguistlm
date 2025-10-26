@@ -204,8 +204,8 @@ export default function Write(): JSX.Element {
 						style={{
 							fontSize: "1rem",
 							color: typeof window !== "undefined" && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
-								? "#f3f3e7"
-								: "#302c2a",
+								? "#302c2a"
+								: "#f3f3e7",
 							fontFamily: "inherit",
 							lineHeight: 1.5,
 							letterSpacing: "normal",
