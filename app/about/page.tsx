@@ -132,7 +132,6 @@ export default function About(): JSX.Element {
 								{ icon: <RiGeminiFill size={36} />, label: "Gemini" },
 								{ icon: <RiTailwindCssFill size={36} />, label: "Tailwind" },
 								{ icon: <SiNextui size={36} />, label: "NextUI" },
-								{ icon: <SiElevenlabs size={36} />, label: "ElevenLabs" },
 							].map((t) => (
 								<div key={t.label} className="snap-start shrink-0 w-48 bg-llm-blue-flower/10 dark:bg-default-100 border-2 border-default-200 rounded-xl p-6 text-center hover:border-llm-sea-glass hover:shadow-lg transition-all">
 									<div className="mb-3 flex items-center justify-center">{t.icon}</div>
