@@ -103,8 +103,20 @@ export default function Write(): JSX.Element {
 	return (
 		<>
 		<TooltipPortal onExplain={handleExplain}/>
-		<div className="flex justify-center w-full h-full overflow-hidden">
-			<div className="flex gap-x-4 w-[90%] p-4 h-full min-h-0 flex-col">
+		<div className="flex flex-col justify-center items-center w-full h-full overflow-hidden bg-llm-lace dark:bg-default-50 relative">
+			{/* Header section */}
+			<div className="w-[90%] pt-4 pb-2">
+				<div className="text-center mb-2">
+					<h1 className="text-xl md:text-2xl font-bold text-foreground mb-1">
+						Practice Your <span className="text-llm-chinois">Writing Skills</span>
+					</h1>
+					<p className="text-default-600 text-xs md:text-sm">
+						Get instant AI feedback on grammar, vocabulary, and style
+					</p>
+				</div>
+			</div>
+
+			<div className="flex gap-x-4 w-[90%] p-4 h-full min-h-0 flex-col flex-1">
 				<div className="flex gap-x-4 flex-1 min-h-0">
 					<div className="flex-1 min-w-0 h-full relative">
 						<Highlighter
@@ -131,8 +143,8 @@ export default function Write(): JSX.Element {
 							}}
 						/>
 					</div>
-
-					<ChatBox ref={chatRef} endpoint="/api/explainations"/>
+					
+					<ChatBox ref={chatRef} className="w-[30%]" endpoint="/api/explainations"/>
 				</div>
 
 				{/* Action buttons at the bottom */}
