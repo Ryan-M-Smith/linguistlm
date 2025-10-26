@@ -1,6 +1,6 @@
 "use client";
 
-import { JSX, useId, useState } from "react";
+import { JSX, useEffect, useId, useRef, useState } from "react";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import InputBox from "./input-box";
@@ -18,6 +18,24 @@ export default function ChatBox({ className, endpoint = "/api/explainations" }: 
 	const [messages, setMessages] = useState<ChatMessage[]>([]);
 	// useId yields a value that's consistent between server and client, avoiding hydration mismatches
 	const listId = useId();
+	const listRef = useRef<HTMLDivElement | null>(null);
+
+	// When a new message is added, keep the view anchored to the top of the chat list
+	// Scroll to top of last user message when a new prompt is added
+	useEffect(() => {
+		if (!messages.length || !listRef.current) return;
+		const el = listRef.current;
+		const userMessages = el.querySelectorAll("[data-role='user']");
+		const lastUserEl = userMessages[userMessages.length - 1];
+
+		if (lastUserEl && messages[messages.length - 1].isLoading) {
+			const containerRect = el.getBoundingClientRect();
+			const messageRect = lastUserEl.getBoundingClientRect();
+			console.log(messageRect.top, containerRect.top, el.scrollTop);
+			const offset = messageRect.top - containerRect.top + el.scrollTop - 40; // 40px padding from top
+			el.scrollTo({ top: offset, behavior: "smooth" });
+		}
+	}, [messages]);
 
 	const send = async (prompt: string) => {
 		const q = prompt?.trim();
@@ -55,10 +73,6 @@ export default function ChatBox({ className, endpoint = "/api/explainations" }: 
 						return { ...m, text: nextText, isLoading: first ? false : m.isLoading };
 					}));
 					first = false;
-					queueMicrotask(() => {
-						const el = document.getElementById(`chat-list-${listId}`);
-						if (el) el.scrollTop = el.scrollHeight;
-					});
 				}
 				setMessages((prev) => prev.map(m => m.id === idModel ? { ...m, isLoading: false } : m));
 			}
@@ -68,11 +82,7 @@ export default function ChatBox({ className, endpoint = "/api/explainations" }: 
 			setMessages((prev) => prev.map(m => m.id === idModel ? { ...m, text: `Error: ${msg}`, isLoading: false } : m));
 		}
 
-		// Scroll to bottom after adding response
-		queueMicrotask(() => {
-			const el = document.getElementById(`chat-list-${listId}`);
-			if (el) el.scrollTop = el.scrollHeight;
-		});
+		// No auto-bottom scroll; we keep the chat anchored to the top when messages change
 	};
 
 	return (
@@ -84,7 +94,7 @@ export default function ChatBox({ className, endpoint = "/api/explainations" }: 
 				hover:border-llm-masala transition-none overflow-none
 			`}
 		>	
-			<div id={`chat-list-${listId}`} className="flex-1 min-h-0 overflow-y-auto px-2 sm:px-4 pt-2">
+			<div ref={listRef} id={`chat-list-${listId}`} className="flex-1 min-h-0 overflow-y-auto px-2 sm:px-4 pt-2">
 				{messages.map((m, i) => (
 					<Message key={m.id} role={m.role} isLoading={m.isLoading} isFirst={i === 0}>
 						{m.role === "model" ? (

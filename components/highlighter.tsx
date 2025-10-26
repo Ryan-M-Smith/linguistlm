@@ -30,15 +30,13 @@ export function Highlighter({
 		if (!document.getElementById(id)) {
 			const style = document.createElement('style');
 			style.id = id;
-			style.textContent = `
-.llm-ce-placeholder:empty:before {
-	content: attr(data-placeholder);
-	color: inherit;
-	opacity: 0.6;
-	pointer-events: none;
-	white-space: pre-wrap;
-}
-`;
+			style.textContent = `.llm-ce-placeholder:empty:before {
+				content: attr(data-placeholder);
+				color: inherit;
+				opacity: 0.6;
+				pointer-events: none;
+				white-space: pre-wrap;
+			}`;
 			document.head.appendChild(style);
 		}
 	}, []);

@@ -45,7 +45,7 @@ export default function Message({ className, children, role, isLoading, isFirst 
 				<div className="text-left text-base sm:text-lg text-zinc-100 whitespace-pre-line">
 					{isLoading ? (
 						<div className="flex items-center gap-2">
-							<span>Waiting on LinguistLM</span>
+							<span> Waiting on LinguistLM </span>
 							<Spinner
 								className="flex items-center"
 								variant="dots"
