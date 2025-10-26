@@ -1,12 +1,65 @@
 "use client";
 
 import { Button } from "@heroui/button";
-import { JSX, useState } from "react";
+import { JSX, useState, useEffect, useRef, useCallback } from "react";
 import { FaMicrophone, FaStop, FaVolumeUp } from "react-icons/fa";
+import { LiveSessionManager, ChatMessage } from "@/lib/gemini-live-client";
 
 export default function Speak(): JSX.Element {
-	const [isListening, setIsListening] = useState(false);
-	const [isSpeaking, setIsSpeaking] = useState(false);
+	const [conversationLog, setConversationLog] = useState<ChatMessage[]>([]);
+	const [isRecording, setIsRecording] = useState(false);
+	const [apiError, setApiError] = useState<string | null>(null);
+	const sessionManagerRef = useRef<LiveSessionManager | null>(null);
+	const chatWindowRef = useRef<HTMLDivElement>(null);
+
+	// Callback for LiveSessionManager to update chat messages
+	const handleNewMessage = useCallback((message: ChatMessage) => {
+		setConversationLog((prev) => [...prev, message]);
+	}, []);
+
+	// Callback for LiveSessionManager to update recording status
+	const handleRecordingStatusChange = useCallback((recording: boolean) => {
+		setIsRecording(recording);
+		if (!recording) {
+			setApiError(null);
+		}
+	}, []);
+
+	// Callback for LiveSessionManager to update API errors
+	const handleApiError = useCallback((error: string) => {
+		setApiError(error);
+	}, []);
+
+	// Initialize and clean up LiveSessionManager
+	useEffect(() => {
+		sessionManagerRef.current = new LiveSessionManager(
+			handleNewMessage,
+			handleRecordingStatusChange,
+			handleApiError
+		);
+
+		return () => {
+			if (sessionManagerRef.current) {
+				sessionManagerRef.current.stopSession();
+			}
+		};
+	}, [handleNewMessage, handleRecordingStatusChange, handleApiError]);
+
+	// Auto-scroll chat window to bottom
+	useEffect(() => {
+		if (chatWindowRef.current) {
+			chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight;
+		}
+	}, [conversationLog]);
+
+	const toggleConversation = async () => {
+		if (isRecording) {
+			await sessionManagerRef.current?.stopSession();
+		} else {
+			setApiError(null);
+			await sessionManagerRef.current?.startSession();
+		}
+	};
 
 	return (
 		<div className="flex flex-col justify-center items-center w-full h-full overflow-hidden bg-llm-lace dark:bg-default-50 relative">
@@ -20,89 +73,85 @@ export default function Speak(): JSX.Element {
 			</div>
 
 			{/* Main content area */}
-			<div className="flex gap-x-4 w-[90%] flex-1 pb-4">
+			<div className="flex gap-x-4 w-[90%] flex-1 pb-4 min-h-0">
 				{/* Left side - Conversation display */}
-				<div className="flex-1 flex flex-col">
+				<div className="flex-2 flex flex-col min-w-0 min-h-0">
 					<div className="flex items-center justify-between mb-2 px-1">
 						<label className="text-sm font-semibold text-default-700">Conversation</label>
 						<div className="flex items-center gap-1">
-							<span className={`w-2 h-2 rounded-full ${isListening ? 'bg-danger animate-pulse' : 'bg-success'}`}></span>
+							<span className={`w-2 h-2 rounded-full ${isRecording ? 'bg-danger animate-pulse' : 'bg-success'}`}></span>
 							<span className="text-xs text-default-500">
-								{isListening ? 'Listening...' : 'Ready'}
+								{isRecording ? 'Listening...' : 'Ready'}
 							</span>
 						</div>
 					</div>
-					<div
-						className={`
-							flex-1 p-6 border-4 dark:bg-default-100 dark:border-llm-chinois
-							bg-llm-blue-flower/10 border-llm-masala rounded-2xl
-							outline-none overflow-y-auto
-							hover:border-llm-sea-glass hover:shadow-lg transition-all
-						`}
-					>
-						<div className="space-y-4 h-full flex flex-col justify-end">
-							{/* Sample conversation messages */}
-							<div className="space-y-4">
-								<div className="flex items-start gap-3">
-									<div className="w-10 h-10 bg-llm-chinois rounded-full flex items-center justify-center text-primary-foreground font-bold text-sm flex-shrink-0">
-										AI
-									</div>
-									<div className="bg-default-100 dark:bg-default-50 p-4 rounded-2xl rounded-tl-sm max-w-[80%]">
-										<p className="text-sm text-foreground">
-											Bonjour! Comment allez-vous aujourd'hui? Let's practice some basic French greetings.
-										</p>
-										<p className="text-xs text-default-500 mt-2">
-											Hello! How are you today?
-										</p>
-									</div>
+					<div className="flex-1 flex flex-col min-h-0">
+						<div
+							ref={chatWindowRef}
+							className={`
+								flex-1 p-6 border-4 dark:bg-default-100 dark:border-llm-chinois
+								bg-llm-blue-flower/10 border-llm-masala rounded-2xl
+								outline-none overflow-y-auto overflow-x-hidden
+								hover:border-llm-sea-glass hover:shadow-lg transition-all
+							`}
+						>
+							{conversationLog.length === 0 ? (
+								<div className="h-full flex items-center justify-center">
+									<p className="text-center text-default-500 italic">
+										Click "Start Conversation" to begin speaking with your language tutor!
+									</p>
 								</div>
-
-								<div className="flex items-start gap-3 justify-end">
-									<div className="bg-llm-sea-glass/40 dark:bg-llm-chinois/20 p-4 rounded-2xl rounded-tr-sm max-w-[80%]">
-										<p className="text-sm text-foreground">
-											Je vais bien, merci!
-										</p>
-										<p className="text-xs text-default-500 mt-2">
-											I'm doing well, thank you!
-										</p>
-									</div>
-									<div className="w-10 h-10 bg-llm-sea-glass rounded-full flex items-center justify-center text-primary-foreground font-bold text-sm flex-shrink-0">
-										You
-									</div>
-								</div>
-
-								<div className="flex items-start gap-3">
-									<div className="w-10 h-10 bg-llm-chinois rounded-full flex items-center justify-center text-primary-foreground font-bold text-sm flex-shrink-0">
-										AI
-									</div>
-									<div className="bg-default-100 dark:bg-default-50 p-4 rounded-2xl rounded-tl-sm max-w-[80%]">
-										<p className="text-sm text-foreground">
-											Excellent pronunciation! Now, can you tell me what you did today?
-										</p>
-									</div>
-								</div>
-
-								{isSpeaking && (
-									<div className="flex items-start gap-3">
-										<div className="w-10 h-10 bg-llm-chinois rounded-full flex items-center justify-center text-primary-foreground font-bold text-sm flex-shrink-0 animate-pulse">
-											<FaVolumeUp size={16} />
-										</div>
-										<div className="bg-default-100 dark:bg-default-50 p-4 rounded-2xl rounded-tl-sm max-w-[80%]">
-											<div className="flex gap-2">
-												<div className="w-2 h-2 bg-llm-chinois rounded-full animate-bounce"></div>
-												<div className="w-2 h-2 bg-llm-chinois/70 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-												<div className="w-2 h-2 bg-llm-chinois/50 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+							) : (
+								<div className="space-y-4">
+									{conversationLog.map((msg, index) => (
+										<div
+											key={index}
+											className={`flex items-start gap-3 ${
+												msg.type === 'user' ? 'justify-end' : ''
+											} ${msg.type === 'status' ? 'justify-center' : ''}`}
+										>
+											{msg.type !== 'status' && msg.type === 'model' && (
+												<div className="w-10 h-10 bg-llm-chinois rounded-full flex items-center justify-center text-primary-foreground font-bold text-sm shrink-0">
+													AI
+												</div>
+											)}
+											<div
+												className={`p-4 rounded-2xl wrap-break-word ${
+													msg.type === 'user'
+														? 'bg-llm-sea-glass/40 dark:bg-llm-chinois/20 rounded-tr-sm max-w-[70%]'
+														: msg.type === 'model'
+														? 'bg-default-100 dark:bg-default-50 rounded-tl-sm max-w-[70%]'
+														: 'bg-default-200 dark:bg-default-100 text-sm italic max-w-full'
+												}`}
+											>
+												<p className="text-sm text-foreground wrap-break-word whitespace-pre-wrap">{msg.text}</p>
+												<p className="text-xs text-default-400 mt-2">
+													{new Date(msg.timestamp).toLocaleTimeString()}
+												</p>
 											</div>
+											{msg.type === 'user' && (
+												<div className="w-10 h-10 bg-llm-sea-glass rounded-full flex items-center justify-center text-primary-foreground font-bold text-sm shrink-0">
+													You
+												</div>
+											)}
 										</div>
-									</div>
-								)}
-							</div>
+									))}
+								</div>
+							)}
 						</div>
+
+						{/* Error display */}
+						{apiError && (
+							<div className="mt-4 bg-danger-50 dark:bg-danger-100/10 border-2 border-danger rounded-xl p-4">
+								<p className="text-sm font-semibold text-danger mb-1">Error</p>
+								<p className="text-xs text-danger/80">{apiError}</p>
+							</div>
+						)}
 					</div>
 				</div>
 
 				{/* Right side - Controls and info */}
-				<div className="w-[30%] flex flex-col">
+				<div className="flex-1 flex flex-col min-w-[320px] max-w-[400px]">
 					<div className="flex items-center justify-between mb-2 px-1">
 						<label className="text-sm font-semibold text-default-700">Voice Controls</label>
 						<div className="flex items-center gap-1">
@@ -121,35 +170,34 @@ export default function Speak(): JSX.Element {
 						<div className="flex-1 flex flex-col items-center justify-center gap-6">
 							<div className="text-center">
 								<p className="text-sm font-semibold text-foreground mb-2">
-									{isListening ? 'Listening to you...' : 'Tap to start speaking'}
+									{isRecording ? 'Listening to you...' : 'Start conversation'}
 								</p>
 								<p className="text-xs text-default-500">
-									{isListening ? 'Release when finished' : 'Hold to talk with your tutor'}
+									{isRecording ? 'Click to stop' : 'Click to talk with your tutor'}
 								</p>
 							</div>
 
 							<button
-								onMouseDown={() => setIsListening(true)}
-								onMouseUp={() => setIsListening(false)}
-								onTouchStart={() => setIsListening(true)}
-								onTouchEnd={() => setIsListening(false)}
+								onClick={toggleConversation}
+								disabled={!!apiError && !isRecording}
 								className={`
 									w-32 h-32 rounded-full flex items-center justify-center
 									transition-all shadow-lg hover:shadow-xl
-									${isListening 
+									${isRecording 
 										? 'bg-danger scale-110 animate-pulse' 
 										: 'bg-llm-chinois hover:scale-105'
 									}
+									disabled:opacity-50 disabled:cursor-not-allowed
 								`}
 							>
-								{isListening ? (
+								{isRecording ? (
 									<FaStop className="text-white" size={40} />
 								) : (
 									<FaMicrophone className="text-white" size={40} />
 								)}
 							</button>
 
-							{isListening && (
+							{isRecording && (
 								<div className="flex gap-1">
 									<div className="w-1 h-8 bg-danger rounded-full animate-pulse"></div>
 									<div className="w-1 h-12 bg-danger/80 rounded-full animate-pulse" style={{ animationDelay: '0.1s' }}></div>
@@ -160,33 +208,68 @@ export default function Speak(): JSX.Element {
 							)}
 						</div>
 
-						{/* Quick stats */}
+						{/* Session stats */}
 						<div className="space-y-3 mt-6 pt-6 border-t-2 border-default-200">
 							<div className="bg-llm-lace dark:bg-default-50 p-3 rounded-xl">
-								<p className="text-xs text-default-500 mb-1">Today's Practice</p>
-								<p className="text-lg font-bold text-foreground">12 minutes</p>
+								<p className="text-xs text-default-500 mb-1">Messages</p>
+								<p className="text-lg font-bold text-foreground">
+									{conversationLog.filter(m => m.type !== 'status').length}
+								</p>
 							</div>
 							<div className="bg-llm-lace dark:bg-default-50 p-3 rounded-xl">
-								<p className="text-xs text-default-500 mb-1">Words Spoken</p>
-								<p className="text-lg font-bold text-foreground">156 words</p>
+								<p className="text-xs text-default-500 mb-1">Your Turns</p>
+								<p className="text-lg font-bold text-foreground">
+									{conversationLog.filter(m => m.type === 'user').length}
+								</p>
 							</div>
 							<div className="bg-llm-lace dark:bg-default-50 p-3 rounded-xl">
-								<p className="text-xs text-default-500 mb-1">Accuracy Score</p>
-								<p className="text-lg font-bold text-llm-chinois">87%</p>
+								<p className="text-xs text-default-500 mb-1">AI Responses</p>
+								<p className="text-lg font-bold text-llm-chinois">
+									{conversationLog.filter(m => m.type === 'model').length}
+								</p>
 							</div>
 						</div>
 
-						{/* Settings button */}
+						{/* Clear conversation button */}
 						<Button
 							className="mt-4 bg-default-200 dark:bg-default-50 hover:bg-llm-sea-glass transition-all"
 							variant="flat"
 							fullWidth
+							onClick={() => setConversationLog([])}
+							disabled={conversationLog.length === 0 || isRecording}
 						>
-							⚙️ Settings
+							🗑️ Clear Conversation
 						</Button>
 					</div>
 				</div>
 			</div>
+			
+			{/* Custom scrollbar styles */}
+			<style jsx>{`
+				/* Smooth scrollbar styling */
+				div[ref] {
+					scrollbar-width: thin;
+					scrollbar-color: rgb(var(--nextui-default-300)) rgb(var(--nextui-default-100));
+				}
+				
+				div[ref]::-webkit-scrollbar {
+					width: 8px;
+				}
+				
+				div[ref]::-webkit-scrollbar-track {
+					background: rgb(var(--nextui-default-100));
+					border-radius: 10px;
+				}
+				
+				div[ref]::-webkit-scrollbar-thumb {
+					background: rgb(var(--nextui-default-300));
+					border-radius: 10px;
+				}
+				
+				div[ref]::-webkit-scrollbar-thumb:hover {
+					background: rgb(var(--nextui-default-400));
+				}
+			`}</style>
 		</div>
 	);
 }

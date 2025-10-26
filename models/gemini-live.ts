@@ -1,153 +1,127 @@
-import {
-	GoogleGenAI,
-	LiveServerMessage,
-	MediaResolution,
-	Modality,
-	Session,
-} from "@google/genai";
-import mime from "mime";
-import { writeFile } from "fs";
 
-import { responseQueue } from "@/lib/singletons";
+/**
+ * Streams Gemini Live API responses for audio-to-audio chat.
+ * @param history Conversation history (array of {role, parts})
+ * @param audioBuffer User's audio input as a Buffer (webm or pcm)
+ * @returns ReadableStream that yields Gemini's live audio responses as base64
+ */
+export async function streamLiveAudio(
+	history: { role: string; parts: { text: string }[] }[],
+	audioBuffer: Buffer
+): Promise<ReadableStream> {
+	const session = await getLiveSession();
 
-async function handleTurn(): Promise<LiveServerMessage[]> {
-	const turn: LiveServerMessage[] = [];
-	let done = false;
-
-	while (!done) {
-		const message = await waitMessage();
-		turn.push(message);
-		if (message.serverContent && message.serverContent.turnComplete) {
-			done = true;
-		}
+	// Send conversation history as context (if any)
+	if (history && history.length > 0) {
+		session.sendClientContent({ turns: history });
 	}
 
-	return turn;
-}
-
-async function waitMessage(): Promise<LiveServerMessage> {
-	let done = false;
-	let message: LiveServerMessage | undefined = undefined;
-	
-	while (!done) {
-		message = responseQueue.shift();
-
-		if (message) {
-			handleModelTurn(message);
-			done = true;
-		}
-		else {
-			await new Promise((resolve) => setTimeout(resolve, 100));
-		}
-	}
-
-	return message!;
-}
-
-function handleModelTurn(message: LiveServerMessage) {
-	const audioParts: string[] = [];
-
-	if (!message.serverContent?.modelTurn?.parts) {
-		return;
-	}
-
-	const [ part ] = message.serverContent?.modelTurn?.parts;
-
-	if (part.fileData) {
-		console.log(`File: ${part?.fileData.fileUri}`);
-	}
-
-	if (part.inlineData) {
-		const fileName = "audio.wav";
-		const inlineData = part.inlineData;
-
-		audioParts.push(inlineData?.data ?? "");
-
-		const buffer = convertToWav(audioParts, inlineData.mimeType ?? "");
-		saveBinaryFile(fileName, buffer);
-	}
-
-	if (part.text) {
-		console.log(part.text);
-	}
-}
-
-function saveBinaryFile(fileName: string, content: Buffer) {
-	writeFile(fileName, content, "utf8", (err) => {
-		if (err) {
-			console.error(`Error writing file ${fileName}:`, err);
-			return;
-		}
-		console.log(`Appending stream content to file ${fileName}.`);
-	});
-}
-
-interface WavConversionOptions {
-	numChannels: number,
-	sampleRate: number,
-	bitsPerSample: number
-}
-
-function convertToWav(rawData: string[], mimeType: string) {
-	const options = parseMimeType(mimeType);
-	const dataLength = rawData.reduce((a, b) => a + b.length, 0);
-	const wavHeader = createWavHeader(dataLength, options);
-	const buffer = Buffer.concat(rawData.map(data => Buffer.from(data, "base64")));
-
-	return Buffer.concat([wavHeader, buffer]);
-}
-
-function parseMimeType(mimeType : string) {
-	const [fileType, ...params] = mimeType.split(";").map(s => s.trim());
-	const [_, format] = fileType.split("/");
-
-	const options : Partial<WavConversionOptions> = {
-		numChannels: 1,
-		bitsPerSample: 16,
+	// Send the user's audio as a real-time input (as Blob)
+	// Gemini expects a Blob-like object with base64 data and mimeType
+	const audioUint8 = new Uint8Array(audioBuffer);
+	const base64 = Buffer.from(audioUint8).toString('base64');
+	const audioBlob = {
+		data: base64,
+		mimeType: 'audio/pcm;rate=16000', // or webm if supported by Gemini
 	};
+	session.sendRealtimeInput({ media: audioBlob });
 
-	if (format && format.startsWith("L")) {
-		const bits = parseInt(format.slice(1), 10);
-		if (!isNaN(bits)) {
-			options.bitsPerSample = bits;
+	// Stream Gemini's live audio responses as they arrive
+	const stream = new ReadableStream({
+		async start(controller) {
+			let done = false;
+			while (!done) {
+				const msg: LiveServerMessage | undefined = await new Promise(resolve => {
+					const check = () => {
+						// @ts-ignore
+						import("@/lib/singletons").then(({ responseQueue }) => {
+							if (responseQueue.length > 0) {
+								resolve(responseQueue.shift());
+							} else {
+								setTimeout(check, 50);
+							}
+						});
+					};
+					check();
+				});
+				// Only stream audio parts
+				if (msg && msg.serverContent && msg.serverContent.modelTurn) {
+					const audioParts = msg.serverContent.modelTurn.parts?.filter((p: any) => p.inlineData && p.inlineData.mimeType?.startsWith("audio"));
+					if (audioParts && audioParts.length > 0) {
+						for (const part of audioParts) {
+							if (part.inlineData?.data) {
+								controller.enqueue(`__AUDIO__${part.inlineData.data}`);
+							}
+						}
+					}
+					if (msg.serverContent.turnComplete) {
+						done = true;
+					}
+				}
+			}
+			controller.close();
+			session.close();
 		}
-	}
-
-	for (const param of params) {
-		const [key, value] = param.split("=").map(s => s.trim());
-		if (key === "rate") {
-			options.sampleRate = parseInt(value, 10);
-		}
-	}
-
-	return options as WavConversionOptions;
+	});
+	return stream;
 }
 
-function createWavHeader(dataLength: number, options: WavConversionOptions) {
-	const {
-		numChannels,
-		sampleRate,
-		bitsPerSample,
-	} = options;
+import { getLiveSession } from "@/lib/gemini-model";
+import { LiveServerMessage } from "@google/genai";
 
-	// http://soundfile.sapp.org/doc/WaveFormat
-	const byteRate = sampleRate * numChannels * bitsPerSample / 8;
-	const blockAlign = numChannels * bitsPerSample / 8;
-	const buffer = Buffer.alloc(44);
+/**
+ * Streams Gemini Live API responses for a back-and-forth live chat.
+ * @param history Conversation history (array of {role, parts})
+ * @param message User's new message
+ * @returns ReadableStream that yields Gemini's live responses as text
+ */
+export async function streamLive(
+	history: { role: string; parts: { text: string }[] }[],
+	message: string
+): Promise<ReadableStream> {
+	// Start a new live session
+	const session = await getLiveSession();
 
-	buffer.write("RIFF", 0);                      // ChunkID
-	buffer.writeUInt32LE(36 + dataLength, 4);     // ChunkSize
-	buffer.write("WAVE", 8);                      // Format
-	buffer.write("fmt ", 12);                     // Subchunk1ID
-	buffer.writeUInt32LE(16, 16);                 // Subchunk1Size (PCM)
-	buffer.writeUInt16LE(1, 20);                  // AudioFormat (1 = PCM)
-	buffer.writeUInt16LE(numChannels, 22);        // NumChannels
-	buffer.writeUInt32LE(sampleRate, 24);         // SampleRate
-	buffer.writeUInt32LE(byteRate, 28);           // ByteRate
-	buffer.writeUInt16LE(blockAlign, 32);         // BlockAlign
-	buffer.writeUInt16LE(bitsPerSample, 34);      // BitsPerSample
-	buffer.write("data", 36);                     // Subchunk2ID
-	buffer.writeUInt32LE(dataLength, 40);         // Subchunk2Size
+	// Send the full conversation (history + new user message)
+	const turns = [
+		...history.map(h => h.parts.map(p => p.text).join("\n")),
+		message
+	];
+	session.sendClientContent({ turns });
 
-	return buffer;
+	// Stream Gemini's live responses as they arrive
+		const stream = new ReadableStream({
+			async start(controller) {
+				let done = false;
+				while (!done) {
+					// Wait for a message to appear in the queue
+					const msg: LiveServerMessage | undefined = await new Promise(resolve => {
+						const check = () => {
+							// @ts-ignore
+							import("@/lib/singletons").then(({ responseQueue }) => {
+								if (responseQueue.length > 0) {
+									resolve(responseQueue.shift());
+								} else {
+									setTimeout(check, 50);
+								}
+							});
+						};
+						check();
+					});
+					// Stream text as it arrives
+					if (msg && msg.serverContent && msg.serverContent.modelTurn) {
+						const text = msg.text;
+						if (text) controller.enqueue(text);
+						// End of turn if turnComplete is true
+						if (msg.serverContent.turnComplete) {
+							done = true;
+						}
+					}
+				}
+				controller.close();
+				session.close();
+			}
+		});
+		return stream;
 }
+
