@@ -41,14 +41,23 @@ export default function Home(): JSX.Element {
                             </div>
 
                             <div className="space-y-4">
-                                <div className="bg-default-100 p-4 rounded-2xl slide-in rounded-tl-0 rounded-tl-none">
-                                    <p className="text-foreground">Bonjour! Let's practice introducing yourself. Try saying "My name is..." in French.</p>
+                                <div className="bg-default-100 p-4 rounded-2xl slide-in rounded-tl-none group">
+                                    <p className="text-foreground transition-opacity duration-200">
+																			<span className="inline-block group-hover:hidden">Bonjour, je m'appelle Pierre et je suis étudiant ici.</span>
+																			<span className="hidden group-hover:inline-block">Hello, my name is Pierre and I'm a student here.</span>
+																		</p>
                                 </div>
-                                <div className="bg-llm-chinois text-primary-foreground p-4 rounded-2xl ml-8 slide-in rounded-tr-none">
-                                    <p>Je m'appelle Sarah. Enchanté!</p>
+                                <div className="bg-llm-chinois text-primary-foreground p-4 rounded-2xl ml-8 slide-in rounded-tr-none group">
+                                    <p className="text-foreground transition-opacity duration-200">
+																			<span className="inline-block group-hover:hidden">Enchantée Pierre, je m'appelle Sophie et je viens de Paris.</span>
+																			<span className="hidden group-hover:inline-block">Nice to meet you Pierre, my name is Sophie and I come from Paris.</span>
+																		</p>
                                 </div>
-                                <div className="bg-default-100 p-4 rounded-2xl slide-in rounded-tl-none">
-                                    <p className="text-foreground">Excellent! Your pronunciation is great. Now let's practice asking someone their name...</p>
+                                <div className="bg-default-100 p-4 rounded-2xl slide-in rounded-tl-none group">
+                                    <p className="text-foreground transition-opacity duration-200">
+																			<span className="inline-block group-hover:hidden">C'est super, j'adore Paris et j'aimerais y habiter un jour !</span>
+																			<span className="hidden group-hover:inline-block">That's great, I love Paris and I'd like to live there one day!</span>
+																		</p>
                                 </div>
                                 <div className="flex gap-2 px-4">
                                     <div className="w-2 h-2 bg-llm-sea-glass rounded-full typing-dot"></div>
@@ -90,12 +99,6 @@ export default function Home(): JSX.Element {
 
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                         <div className="bg-default-100 p-6 rounded-2xl hover:shadow-lg transition-all">
-                            <div className="text-3xl mb-4">🎯</div>
-                            <h4 className="text-xl font-semibold mb-3 text-foreground">Personalized Learning</h4>
-                            <p className="text-default-700">AI adapts to your skill level, interests, and learning style for a truly customized experience.</p>
-                        </div>
-
-                        <div className="bg-default-100 p-6 rounded-2xl hover:shadow-lg transition-all">
                             <div className="text-3xl mb-4">⚡</div>
                             <h4 className="text-xl font-semibold mb-3 text-foreground">Instant Feedback</h4>
                             <p className="text-default-700">Get immediate corrections and explanations to accelerate your learning progress.</p>
@@ -108,21 +111,9 @@ export default function Home(): JSX.Element {
                         </div>
 
                         <div className="bg-default-100 p-6 rounded-2xl hover:shadow-lg transition-all">
-                            <div className="text-3xl mb-4">📊</div>
-                            <h4 className="text-xl font-semibold mb-3 text-foreground">Track Progress</h4>
-                            <p className="text-default-700">Monitor your improvement with detailed analytics and celebrate milestones along the way.</p>
-                        </div>
-
-                        <div className="bg-default-100 p-6 rounded-2xl hover:shadow-lg transition-all">
                             <div className="text-3xl mb-4">🌟</div>
                             <h4 className="text-xl font-semibold mb-3 text-foreground">Real-World Practice</h4>
                             <p className="text-default-700">Learn practical vocabulary and phrases you'll actually use in everyday conversations.</p>
-                        </div>
-
-                        <div className="bg-default-100 p-6 rounded-2xl hover:shadow-lg transition-all">
-                            <div className="text-3xl mb-4">🏆</div>
-                            <h4 className="text-xl font-semibold mb-3 text-foreground">Stay Motivated</h4>
-                            <p className="text-default-700">Achievement badges, streaks, and progress milestones keep you engaged and excited to learn.</p>
                         </div>
                     </div>
                 </div>
@@ -202,8 +193,8 @@ export default function Home(): JSX.Element {
                     <div className="grid md:grid-cols-3 gap-12 max-w-5xl mx-auto">
                         <div className="text-center">
                             <div className="w-20 h-20 bg-llm-sea-glass rounded-full flex items-center justify-center text-primary-foreground font-bold text-3xl mx-auto mb-6">1</div>
-                            <h3 className="text-2xl font-bold mb-4 text-foreground">Choose Your Language</h3>
-                            <p className="text-default-700 leading-relaxed">Select from dozens of languages and tell us your current skill level and learning goals.</p>
+                            <h3 className="text-2xl font-bold mb-4 text-foreground">Choose Learning Method</h3>
+                            <p className="text-default-700 leading-relaxed">Select from reading comprehension, writing and grammar, and speaking proficiency.</p>
                         </div>
 
                         <div className="text-center">
@@ -226,7 +217,7 @@ export default function Home(): JSX.Element {
                     <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">Ready to Start Your Language Journey?</h2>
                     <p className="text-xl mb-10 opacity-95">Join learners worldwide who are achieving fluency with AI-powered tutoring. Start learning today, completely free.</p>
                     <a href="/learn" className="inline-block bg-llm-chinois text-llm-lace dark:text-foreground px-10 py-4 rounded-full font-semibold text-lg hover:shadow-2xl hover:-translate-y-1 transition-all">Start Learning Free</a>
-                    <p className="mt-6 text-sm opacity-80">No credit card required • Access all features • Cancel anytime</p>
+                    <p className="mt-6 text-sm opacity-80">No credit card required • Access all features</p>
                 </div>
             </section>
 						<Divider className="bg-llm-sea-glass" />
@@ -239,25 +230,25 @@ export default function Home(): JSX.Element {
                     <div>
                         <h4 className="font-semibold mb-4">Product</h4>
                         <ul className="space-y-2 text-sm text-default-700">
-                            <li><a href="#" className="hover:text-primary transition-colors">Features</a></li>
-                            <li><a href="#" className="hover:text-primary transition-colors">Languages</a></li>
-                            <li><a href="#" className="hover:text-primary transition-colors">Pricing</a></li>
+                            <li><a href="#" className="hover:text-llm-sea-glass transition-colors">Features</a></li>
+                            <li><a href="#" className="hover:text-llm-sea-glass transition-colors">Languages</a></li>
+                            <li><a href="#" className="hover:text-llm-sea-glass transition-colors">Pricing</a></li>
                         </ul>
                     </div>
                     <div>
                         <h4 className="font-semibold mb-4">Company</h4>
                         <ul className="space-y-2 text-sm text-default-700">
-                            <li><a href="#" className="hover:text-primary transition-colors">About</a></li>
-                            <li><a href="#" className="hover:text-primary transition-colors">Blog</a></li>
-                            <li><a href="#" className="hover:text-primary transition-colors">Contact</a></li>
+                            <li><a href="#" className="hover:text-llm-sea-glass transition-colors">About</a></li>
+                            <li><a href="#" className="hover:text-llm-sea-glass transition-colors">Blog</a></li>
+                            <li><a href="#" className="hover:text-llm-sea-glass transition-colors">Contact</a></li>
                         </ul>
                     </div>
                     <div>
                         <h4 className="font-semibold mb-4">Legal</h4>
                         <ul className="space-y-2 text-sm text-default-700">
-                            <li><a href="#" className="hover:text-primary transition-colors">Privacy</a></li>
-                            <li><a href="#" className="hover:text-primary transition-colors">Terms</a></li>
-                            <li><a href="#" className="hover:text-primary transition-colors">Support</a></li>
+                            <li><a href="#" className="hover:text-llm-sea-glass transition-colors">Privacy</a></li>
+                            <li><a href="#" className="hover:text-llm-sea-glass transition-colors">Terms</a></li>
+                            <li><a href="#" className="hover:text-llm-sea-glass transition-colors">Support</a></li>
                         </ul>
                     </div>
                 </div>
